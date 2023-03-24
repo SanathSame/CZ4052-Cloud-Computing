@@ -15,8 +15,8 @@ from sklearn.preprocessing import LabelBinarizer
 from keras.callbacks import ReduceLROnPlateau
 
 # %%
-train_df = pd.read_csv(r"C:\Users\Siddharth\Desktop\NTU COURSE STUFF\Y4S2\CE4052\Project\Data\sign_mnist_test\sign_mnist_test.csv")
-test_df = pd.read_csv(r"C:\Users\Siddharth\Desktop\NTU COURSE STUFF\Y4S2\CE4052\Project\Data\sign_mnist_train\sign_mnist_train.csv")
+train_df = pd.read_csv(r"C:\Users\Siddharth\Desktop\NTU COURSE STUFF\Y4S2\CE4052\Project\Data\sign_mnist_train\sign_mnist_train.csv")
+test_df = pd.read_csv(r"C:\Users\Siddharth\Desktop\NTU COURSE STUFF\Y4S2\CE4052\Project\Data\sign_mnist_test\sign_mnist_test.csv")
 # %%
 y_train = train_df['label']
 y_test = test_df['label']
@@ -42,9 +42,11 @@ f.set_size_inches(10, 10)
 k = 0
 for i in range(2):
     for j in range(5):
-        ax[i,j].imshow(x_train[k].reshape(28, 28) , cmap = "gray")
+        ax[i,j].imshow(x_train[k].reshape(28, 28))
         k += 1
     plt.tight_layout() 
+# %%
+x_train
 # %%
 # Augmentation
 datagen = ImageDataGenerator(
@@ -94,7 +96,7 @@ for i in range(len(predictions)):
         predictions[i] += 1
 predictions[:5]   
 # %%
-test = pd.read_csv(r"C:\Users\Siddharth\Desktop\NTU COURSE STUFF\Y4S2\CE4052\Project\Data\sign_mnist_train\sign_mnist_train.csv")
+test = pd.read_csv(r"C:\Users\Siddharth\Desktop\NTU COURSE STUFF\Y4S2\CE4052\Project\Data\sign_mnist_test\sign_mnist_test.csv")
 y = test['label']
 # %%
 classes = ["Class " + str(i) for i in range(25) if i != 9]
@@ -106,7 +108,6 @@ plt.figure(figsize = (15,15))
 sns.heatmap(cm,cmap= "Blues", linecolor = 'black' , linewidth = 1 , annot = True, fmt='')
 # %%
 y = y.to_numpy()
-# %%
 correct = np.nonzero(predictions == y)[0]
 # %%
 i = 0
@@ -116,4 +117,10 @@ for c in correct[10:16]:
     plt.title("Predicted Class {},Actual Class {}".format(predictions[c], y[c]))
     # plt.tight_layout()
     i += 1
+# %%
+model.save("./models/alphabet_model.h5")
+# %%
+loaded_model = keras.models.load_model("models/alphabet_model.h5")
+# %%
+[np.argmax(probs) for probs in loaded_model.predict(x_test)]
 # %%
