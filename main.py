@@ -15,8 +15,8 @@ from sklearn.preprocessing import LabelBinarizer
 from keras.callbacks import ReduceLROnPlateau
 
 # %%
-train_df = pd.read_csv(r"C:\Users\Siddharth\Desktop\NTU COURSE STUFF\Y4S2\CE4052\Project\Data\sign_mnist_train\sign_mnist_train.csv")
-test_df = pd.read_csv(r"C:\Users\Siddharth\Desktop\NTU COURSE STUFF\Y4S2\CE4052\Project\Data\sign_mnist_test\sign_mnist_test.csv")
+train_df = pd.read_csv(r"Data\sign_mnist_train\sign_mnist_train.csv")
+test_df = pd.read_csv(r"Data\sign_mnist_test\sign_mnist_test.csv")
 # %%
 y_train = train_df['label']
 y_test = test_df['label']
@@ -96,7 +96,7 @@ for i in range(len(predictions)):
         predictions[i] += 1
 predictions[:5]   
 # %%
-test = pd.read_csv(r"C:\Users\Siddharth\Desktop\NTU COURSE STUFF\Y4S2\CE4052\Project\Data\sign_mnist_test\sign_mnist_test.csv")
+test = pd.read_csv(r"Data\sign_mnist_test\sign_mnist_test.csv")
 y = test['label']
 # %%
 classes = ["Class " + str(i) for i in range(25) if i != 9]
