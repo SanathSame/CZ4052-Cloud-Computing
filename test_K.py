@@ -8,12 +8,13 @@ loaded_model = keras.models.load_model("models/alphabet_model.h5")
 
 def detect_hands(img):
     hand = cv2.CascadeClassifier(cv2.data.haarcascades + 'palm.xml') #Cascade Classifier for front-facing hands
+    img = np.array(img, dtype='uint8')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) #Converts image to grayscale
-    hands = hand.detectMultiScale(gray, scaleFactor=1.6, minNeighbors=5) #All detected hands get put into an array
+    hands = hand.detectMultiScale(gray, scaleFactor=1.6, minNeighbors=1) #All detected hands get put into an array
     if len(hands) != 0:        
         return hands
     else:
-        return False
+        return []
 
 directories = []
 for root, dirs, files in os.walk("archive\\frames"):
@@ -30,11 +31,12 @@ for im_path in all_files:
     # im.show()
     # im = im.convert("L")
     # im.show()
-    im = np.asarray(im, dtype=np.float32) / 255
+    # im = np.asarray(im, dtype=np.float32) / 255
     # im = im.reshape((-1, 28, 28, 1))
     
     hands = detect_hands(im)    
-    if hands: 
+    print(im_path, hands)
+    if len(hands) > 0: 
         print(hands)
         im.show()
 
