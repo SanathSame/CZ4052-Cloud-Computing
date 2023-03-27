@@ -7,10 +7,10 @@ import cv2
 loaded_model = keras.models.load_model("models/alphabet_model.h5")
 
 def detect_hands(img):
-    hand = cv2.CascadeClassifier(cv2.data.haarcascades + 'palm.xml') #Cascade Classifier for front-facing hands
-    img = np.array(img, dtype='uint8')
+    hand = cv2.CascadeClassifier(cv2.data.haarcascades + 'aGest.xml') #Cascade Classifier for front-facing hands
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) #Converts image to grayscale
-    hands = hand.detectMultiScale(gray, scaleFactor=1.6, minNeighbors=1) #All detected hands get put into an array
+    hands = hand.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=1, minSize=(40,40), maxSize=(60,60)) #All detected hands get put into an array
+    # img_hands = img[]
     if len(hands) != 0:        
         return hands
     else:
@@ -26,7 +26,7 @@ for i, (root, dirs, files) in enumerate(os.walk("archive\\frames")):
         all_files.extend([directories[i-1]+ '\\'+ f for f in files])
 
 for im_path in all_files:
-    im = Image.open(f"archive\\frames\\{im_path}", "r")
+    im = cv2.imread(f"archive\\frames\\{im_path}")
     # im = im.resize((28, 28))
     # im.show()
     # im = im.convert("L")
@@ -38,7 +38,10 @@ for im_path in all_files:
     print(im_path, hands)
     if len(hands) > 0: 
         print(hands)
-        im.show()
+        for hand in hands:
+            cv2.rectangle(im, (hand[0], hand[1]), (hand[0] + hand[2], hand[1] + hand[3]), (0, 255, 0), thickness=2)
+        cv2.imshow("Detected hands", im)
+        cv2.waitKey(0)
 
     # pred_class = np.argmax(loaded_model.predict(im))
     # # print(pred_class)
