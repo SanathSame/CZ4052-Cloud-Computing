@@ -1,0 +1,10 @@
+{
+  "resourceName": "s3signsenseistorage422827ee",
+  "bucketName": "signsensei-storage-422827ee",
+  "policyUUID": "da4d5d19",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "READ"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-signsensei-staging-115038-authRole",
+      "UnauthRoleArn": "arn:aws:iam::080062018042:role/amplify-signsensei-staging-115038-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::080062018042:role/amplify-signsensei-staging-115038-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-signsensei-staging-115038-deployment",
+      "UnauthRoleName": "amplify-signsensei-staging-115038-unauthRole",
+      "StackName": "amplify-signsensei-staging-115038",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:080062018042:stack/amplify-signsensei-staging-115038/981a5790-cc95-11ed-8bb9-02757d34bda2",
+      "AmplifyAppId": "dqtwsm1v9a09"
+    },
+    "categories": {
+      "auth": {
+        "SignSensei": {}
+      },
+      "storage": {
+        "s3signsenseistorage422827ee": {}
+      }
+    }
+  }
+}

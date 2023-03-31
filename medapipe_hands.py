@@ -37,7 +37,7 @@ for instance in metadata["instances"]:
                     image_cropped = img[y1:y2, x1:x2]
                     # imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                     results = hands.process(image_cropped)
-                    # print(results.multi_hand_landmarks)
+                    print(results.multi_hand_landmarks)
                     if results.multi_hand_landmarks:
                         for handLms in results.multi_hand_landmarks:
                             for id, lm in enumerate(handLms.landmark):
