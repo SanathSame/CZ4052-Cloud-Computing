@@ -24,14 +24,15 @@ def generate_frames(instance):
     img_id = instance["video_id"]
     start = instance["frame_start"]
     end = instance["frame_end"]
+    term = instance["gloss"]
     if end==-1: end = 250
     x1, y1, x2, y2 = instance["bbox"]
     path = "archive\\videos\\" + img_id + ".mp4"
     print(path)
     cap = cv2.VideoCapture(path)
     count = 1
-    if not os.path.exists(f"archive\\frames\\{img_id}"):
-        os.makedirs(f"archive\\frames\\{img_id}")
+    if not os.path.exists(f"archive\\frames\\{term}\\{img_id}"):
+        os.makedirs(f"archive\\frames\\{term}\\{img_id}")
     while True:
         try:
             success, img = cap.read()
@@ -63,8 +64,8 @@ def generate_frames(instance):
                     try:
                         image_save = image_cropped[y_min-10:y_max+10, x_min-10:x_max+10]
                         cv2.imshow("hand", image_save)
-                        if not cv2.imwrite(f"archive\\frames\\{img_id}\\{count}.jpg", image_save):
-                            print(f"archive\\frames\\{id}\\{count}{time.time()}.jpg")
+                        if not cv2.imwrite(f"archive\\frames\\{term}\\{img_id}\\{count}.jpg", image_save):
+                            print(f"archive\\frames\\{term}\\{id}\\{count}{time.time()}.jpg")
                             print("Not saved")
                     except:
                         print("Nothing")
