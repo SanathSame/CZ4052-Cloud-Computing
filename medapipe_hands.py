@@ -41,7 +41,7 @@ for instance in metadata["instances"]:
                     h, w, c = image_cropped.shape
                     # imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                     results = hands.process(image_cropped)
-                    # print(results.multi_hand_landmarks)
+                    print(results.multi_hand_landmarks)
                     if results.multi_hand_landmarks:
                         x_max = 0
                         y_max = 0
