@@ -1,16 +1,22 @@
 import json
 import numpy as np
 import pandas as pd
+from PIL import Image
 from random import shuffle, choice
 import os
 import shutil
+import cv2
 
 import tensorflow as tf
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D , MaxPool2D , Flatten , Dropout , BatchNormalization
 from keras.layers import Input, Add, Dense, Activation, BatchNormalization, Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D, Dropout
 from keras import Model
 from keras.applications import ResNet50
 
-# import new_mediapipe_hands
+import new_mediapipe_hands
+
+INPUT_SIZE = (224, 224, 3)
 
 def parse_json(): #converts the json file into a pandas datatype
     
@@ -97,7 +103,13 @@ def get_test():
                 print(subdirs)
                 test_dir = choice(subdirs)
                 print(test_dir)
-                os.symlink(os.path.join(root, test_dir), os.path.join("archive/split/test", test_dir))
+                for file in os.listdir(os.path.join(root, dir, test_dir)):
+                    print("Src: {}".format(os.path.join(root, dir, test_dir, file)))
+                    print("Dst: {}".format(os.path.join("archive/split/test", dir, test_dir + "_" + file)))
+                    if not os.path.exists(os.path.join("archive/split/test", dir)):
+                        os.makedirs(os.path.join("archive/split/test", dir))
+                    os.symlink(os.path.abspath(os.path.join(root, dir, test_dir, file)), os.path.join("archive/split/test", dir, test_dir + "_" + file))
+
             # print(os.path.join(subroot, test_dir))
                 # for subdir in subdirs:
 
@@ -137,13 +149,45 @@ def get_model(input_size):
     model = Model(model_res.input, outputs)
     return model
 
+def get_simple_model(input_size):
+    model = Sequential()
+    model.add(Conv2D(75 , (3,3) , strides=1 , padding='same' , activation='relu' , input_shape=input_size))
+    model.add(BatchNormalization())
+    model.add(MaxPool2D((2,2) , strides=2 , padding='same'))
+    model.add(Conv2D(50 , (3,3) , strides=1 , padding='same' , activation='relu'))
+    model.add(Dropout(0.2))
+    model.add(BatchNormalization())
+    model.add(MaxPool2D((2,2) , strides=2 , padding='same'))
+    model.add(Conv2D(25 , (3,3) , strides=1 , padding='same' , activation='relu'))
+    model.add(BatchNormalization())
+    model.add(MaxPool2D((2,2) , strides=2 , padding='same'))
+    model.add(Flatten())
+    model.add(Dense(units=512 , activation='relu'))
+    model.add(Dropout(0.3))
+    model.add(Dense(units=28 , activation='softmax'))
+    model.compile(optimizer='adam' , loss='categorical_crossentropy' , metrics=['accuracy'])
+    model.summary()
+    return model
+
+
 def train_model():
     train_dir = "archive/split/train"
     train_dataset = tf.keras.preprocessing.image_dataset_from_directory(train_dir, 
                                                                     labels='inferred', 
                                                                     label_mode='categorical',
                                                                     batch_size=32,
-                                                                    image_size=(224, 224))
+                                                                    image_size=INPUT_SIZE[:-1],
+                                                                    validation_split=0.2,
+                                                                    subset="training",
+                                                                    seed=42)
+    val_dataset = tf.keras.preprocessing.image_dataset_from_directory(train_dir, 
+                                                                    labels='inferred', 
+                                                                    label_mode='categorical',
+                                                                    batch_size=32,
+                                                                    image_size=INPUT_SIZE[:-1],
+                                                                    validation_split=0.2,
+                                                                    subset="validation",
+                                                                    seed=42)
     print(train_dataset.class_names)
 
     # for batch_X, batch_y in train_dataset.take(1):
@@ -153,7 +197,7 @@ def train_model():
     norm_layer = tf.keras.layers.experimental.preprocessing.Rescaling(1/255.)
 
     norm_train_dataset = train_dataset.map(lambda x, y: (norm_layer(x), y))
-    # norm_val_dataset = val_dataset.map(lambda x, y: (norm_layer(x), y))
+    norm_val_dataset = val_dataset.map(lambda x, y: (norm_layer(x), y))
     # norm_test_dataset = test_dataset.map(lambda x: norm_layer(x))
 
     # for b_X, b_y in norm_train_dataset:
@@ -162,20 +206,62 @@ def train_model():
     #     print(f'max {np.max(b_X[0])}  min {np.min(b_X[0])}')
     #     break
 
-    input_size = (224, 224, 3)
-    model = get_model(input_size)
+    model = get_simple_model(INPUT_SIZE)
 
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    # model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     # model.summary()
 
-    callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=5)
-    checkpoint = tf.keras.callbacks.ModelCheckpoint('/tmp/checkpoint', monitor='val_accuracy', save_best_only=True)
-    model.fit(norm_train_dataset, epochs=10, callbacks=[callback, checkpoint])
-    model.save("models/video_model.h5")
+    # callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
+    checkpoint = tf.keras.callbacks.ModelCheckpoint('models/tmp/checkpoint', monitor='val_accuracy', save_best_only=True)
+    model.fit(norm_train_dataset, validation_data=norm_val_dataset, epochs=10, callbacks=[checkpoint])
+    model.save("models/simple_video_model_size224.h5")
+
+
+def load(filename):
+   np_image = cv2.imread(filename)
+#    np_image = np.array(np_image).astype('float32')/255
+   np_image = cv2.resize(np_image, INPUT_SIZE[:-1])
+#    np_image = np.expand_dims(np_image, axis=0)
+   return np_image
+
+def test_model():
+    test_dir = "archive/split/test"
+    test_dataset = tf.keras.preprocessing.image_dataset_from_directory(test_dir,
+                                                                    labels='inferred',
+                                                                  label_mode='categorical',
+                                                                  batch_size=32,
+                                                                  image_size=INPUT_SIZE[:-1])
+    print(test_dataset.class_names)
+
+    norm_layer = tf.keras.layers.experimental.preprocessing.Rescaling(1/255.)
+
+    norm_test_dataset = test_dataset.map(lambda x, y: (norm_layer(x), y))
+
+    # for batch_X, batch_y in test_dataset.take(1):
+    #     print(batch_X.shape)
+    #     print(batch_y.shape)
+
+    # image = load("archive/split/test/a/01610_75.jpg")
+    # cv2.imshow("test_image", image)
+    # cv2.waitKey(0)
+
+    model = tf.keras.models.load_model('models/simple_video_model_size224.h5')
+    test_pred = model.predict(norm_test_dataset)
+
+    # print("Prediction:", test_pred)
+
+    res = [np.argmax(probs) for probs in test_pred]
+    print("Result argmax:", res)
+    print("Length:", len(test_pred[0]), len(test_pred))
+    print("Unique:", np.unique(res))
+    np.savetxt('results.txt', test_pred)
+
+    score = model.evaluate(norm_test_dataset, verbose = 1) 
+
+    print('Test loss:', score[0]) 
+    print('Test accuracy:', score[1])
 
         
-
-
 if __name__ == "__main__":
 #uncomment the following if json has not been parsed
     # df, gloss_list  = parse_json()
@@ -187,4 +273,5 @@ if __name__ == "__main__":
     # get_test()
     # get_train()
     train_model()
+    test_model()
     pass
