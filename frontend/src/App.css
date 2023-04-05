@@ -1,27 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body{
+body {
   font-family: "Roboto", sans-serif;
   background-color: #f8f8f8;
 }
 
-.container{
+.container {
   max-width: 85%;
   margin: auto;
 }
 
-.flexSB{
+.flexSB {
   display: flex;
   justify-content: space-between;
 }
 
-.icon{
+.icon {
   width: 40px;
   height: 40px;
   line-height: 40px;
@@ -32,21 +32,21 @@ body{
   transition: 0.5s;
 }
 
-.icon:hover{
+.icon:hover {
   cursor: pointer;
   background-color: #1eb2a6;
   color: #fff;
 }
 
-a{
+a {
   text-decoration: none;
 }
 
-li{
+li {
   list-style-type: none;
 }
 
-button{
+button {
   border: none;
   padding: 17px 30px;
   background-color: #fff;
@@ -58,47 +58,47 @@ button{
   box-shadow: 0 24px 36px -11px rgba(0, 0, 0, 9%);
 }
 
-button i{
+button i {
   margin-left: 20px;
 }
 
-button:hover{
+button:hover {
   box-shadow: none;
 }
 
-.row{
+.row {
   width: 50%;
 }
 
-.primary-btn{
+.primary-btn {
   background-color: #1eb2a6;
   color: #fff;
 }
 
-#heading{
+#heading {
   text-align: center;
   padding: 40px 0;
 }
 
-#heading h3{
+#heading h3 {
   font-weight: 600;
   letter-spacing: 1px;
   color: #1eb2a6;
   text-transform: uppercase;
 }
 
-#heading h1{
+#heading h1 {
   font-size: 45px;
   margin: 20px 0;
   text-transform: capitalize;
 }
 
-p{
+p {
   line-height: 30px;
   font-size: 18px;
 }
 
-.back{
+.back {
   background-image: url(../public/images/sign_course.jpg);
   background-size: cover;
   background-attachment: fixed;
@@ -114,38 +114,38 @@ p{
   text-align: center;
 }
 
-.back h1{
+.back h1 {
   font-size: 100px;
   font-weight: 400;
 }
 
-.back h2{
+.back h2 {
   font-size: 17px;
   font-weight: 500;
   text-transform: uppercase;
 }
 
-.marigin{
+.marigin {
   margin-top: 40.3%;
 }
 
-.grid{
+.grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 30px;
 }
 
-.flex{
+.flex {
   display: flex;
 }
 
-.grid2{
+.grid2 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 30px;
 }
 
-.outline-btn{
+.outline-btn {
   margin: 0;
   box-shadow: none;
   border: 2px solid #1eb2a6;
@@ -153,40 +153,77 @@ p{
   transition: 0.5s;
 }
 
-.outline-btn:hover{
+.outline-btn:hover {
   background-color: #1eb2a6;
   color: #fff;
 }
 
-.grid3{
+.grid3 {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 10px;
 }
 
-.padding{
+.padding {
   padding: 80px 0;
 }
 
-.shadow{
+.shadow {
   box-shadow: 0 5px 25px -2px rgba(0 0 0 /6%);
   background-color: #fff;
 }
 
 @media screen and (max-width: 768px) {
   .grid3,
-  .grid2
-  .grid{
+  .grid2 .grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
-  .back{
+
+  .back {
     background-position: center;
     padding-top: 50%;
     height: 80vh;
   }
 
-  .marigin{
+  .marigin {
     margin: 85%;
+  }
+}
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

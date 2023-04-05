@@ -3,3 +3,5 @@ keras
 seaborn
 matplotlib
 scikit-learn
+mediapipe
+opencv-python

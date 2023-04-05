@@ -1,0 +1,96 @@
+{
+  "gloss": "j",
+  "instances": [
+    {
+      "bbox": [0, 0, 360, 240],
+      "fps": 25,
+      "frame_end": 33,
+      "frame_start": 1,
+      "instance_id": 0,
+      "signer_id": 9,
+      "source": "asl5200",
+      "split": "test",
+      "url": "https://www.youtube.com/watch?v=8kWVajLqBL4",
+      "variation_id": 0,
+      "video_id": "30820"
+    },
+    {
+      "bbox": [200, 33, 524, 370],
+      "fps": 25,
+      "frame_end": -1,
+      "frame_start": 1,
+      "instance_id": 1,
+      "signer_id": 96,
+      "source": "aslsignbank",
+      "split": "val",
+      "url": "https://aslsignbank.haskins.yale.edu/dictionary/protected_media/glossvideo/ASL/LE/LETTER-J-1668.mp4",
+      "variation_id": 0,
+      "video_id": "66048"
+    },
+    {
+      "bbox": [133, 33, 574, 480],
+      "fps": 25,
+      "frame_end": -1,
+      "frame_start": 1,
+      "instance_id": 2,
+      "signer_id": 21,
+      "source": "asldeafined",
+      "split": "train",
+      "url": "https://media.asldeafined.com/vocabulary/1528811480.114.mp4",
+      "variation_id": 0,
+      "video_id": "31100"
+    },
+    {
+      "bbox": [121, 15, 462, 360],
+      "fps": 25,
+      "frame_end": -1,
+      "frame_start": 1,
+      "instance_id": 3,
+      "signer_id": 20,
+      "source": "handspeak",
+      "split": "train",
+      "url": "https://www.handspeak.com/word/j/j-abc.mp4",
+      "variation_id": 0,
+      "video_id": "31101"
+    },
+    {
+      "bbox": [83, 5, 226, 192],
+      "fps": 25,
+      "frame_end": -1,
+      "frame_start": 1,
+      "instance_id": 4,
+      "signer_id": 11,
+      "source": "signingsavvy",
+      "split": "train",
+      "url": "https://www.signingsavvy.com/signs/mp4/10/10009.mp4",
+      "variation_id": 0,
+      "video_id": "31102"
+    },
+    {
+      "bbox": [7, 12, 229, 240],
+      "fps": 25,
+      "frame_end": -1,
+      "frame_start": 1,
+      "instance_id": 5,
+      "signer_id": 30,
+      "source": "aslpro",
+      "split": "train",
+      "url": "http://www.aslpro.com//main/j/j.swf",
+      "variation_id": 0,
+      "video_id": "31103"
+    },
+    {
+      "bbox": [176, 62, 550, 400],
+      "fps": 25,
+      "frame_end": -1,
+      "frame_start": 1,
+      "instance_id": 6,
+      "signer_id": 12,
+      "source": "aslsearch",
+      "split": "train",
+      "url": "http://www.aslsearch.com/signs/videos/j.mp4",
+      "variation_id": 0,
+      "video_id": "31104"
+    }
+  ]
+}
