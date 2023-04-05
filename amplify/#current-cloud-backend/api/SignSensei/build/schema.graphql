@@ -1,0 +1,370 @@
+
+type User @aws_iam @aws_api_key {
+  id: ID!
+  email: AWSEmail!
+  UserToLesson(filter: ModelUserLessonFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUserLessonConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Lesson @aws_iam @aws_api_key {
+  id: ID!
+  level: Int
+  video: AWSURL
+  users(filter: ModelUserLessonFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUserLessonConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type UserLesson @aws_iam @aws_api_key {
+  id: ID!
+  userId: ID!
+  lessonId: ID!
+  user: User!
+  lesson: Lesson!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelUserConnection @aws_api_key @aws_iam {
+  items: [User]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelUserFilterInput {
+  id: ModelIDInput
+  email: ModelStringInput
+  and: [ModelUserFilterInput]
+  or: [ModelUserFilterInput]
+  not: ModelUserFilterInput
+}
+
+type Query {
+  getUser(id: ID!): User @aws_api_key @aws_iam
+  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection @aws_api_key @aws_iam
+  syncUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelUserConnection @aws_api_key @aws_iam
+  getLesson(id: ID!): Lesson @aws_api_key @aws_iam
+  listLessons(filter: ModelLessonFilterInput, limit: Int, nextToken: String): ModelLessonConnection @aws_api_key @aws_iam
+  syncLessons(filter: ModelLessonFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelLessonConnection @aws_api_key @aws_iam
+  getUserLesson(id: ID!): UserLesson @aws_api_key @aws_iam
+  listUserLessons(filter: ModelUserLessonFilterInput, limit: Int, nextToken: String): ModelUserLessonConnection @aws_api_key @aws_iam
+  syncUserLessons(filter: ModelUserLessonFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelUserLessonConnection @aws_api_key @aws_iam
+  userLessonsByUserId(userId: ID!, sortDirection: ModelSortDirection, filter: ModelUserLessonFilterInput, limit: Int, nextToken: String): ModelUserLessonConnection @aws_api_key @aws_iam
+  userLessonsByLessonId(lessonId: ID!, sortDirection: ModelSortDirection, filter: ModelUserLessonFilterInput, limit: Int, nextToken: String): ModelUserLessonConnection @aws_api_key @aws_iam
+}
+
+input ModelUserConditionInput {
+  email: ModelStringInput
+  and: [ModelUserConditionInput]
+  or: [ModelUserConditionInput]
+  not: ModelUserConditionInput
+}
+
+input CreateUserInput {
+  id: ID
+  email: AWSEmail!
+  _version: Int
+}
+
+input UpdateUserInput {
+  id: ID!
+  email: AWSEmail
+  _version: Int
+}
+
+input DeleteUserInput {
+  id: ID!
+  _version: Int
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
+  updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
+  deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
+  createLesson(input: CreateLessonInput!, condition: ModelLessonConditionInput): Lesson @aws_api_key @aws_iam
+  updateLesson(input: UpdateLessonInput!, condition: ModelLessonConditionInput): Lesson @aws_api_key @aws_iam
+  deleteLesson(input: DeleteLessonInput!, condition: ModelLessonConditionInput): Lesson @aws_api_key @aws_iam
+  createUserLesson(input: CreateUserLessonInput!, condition: ModelUserLessonConditionInput): UserLesson @aws_api_key @aws_iam
+  updateUserLesson(input: UpdateUserLessonInput!, condition: ModelUserLessonConditionInput): UserLesson @aws_api_key @aws_iam
+  deleteUserLesson(input: DeleteUserLessonInput!, condition: ModelUserLessonConditionInput): UserLesson @aws_api_key @aws_iam
+}
+
+input ModelSubscriptionUserFilterInput {
+  id: ModelSubscriptionIDInput
+  email: ModelSubscriptionStringInput
+  and: [ModelSubscriptionUserFilterInput]
+  or: [ModelSubscriptionUserFilterInput]
+}
+
+type Subscription {
+  onCreateUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["createUser"]) @aws_api_key @aws_iam
+  onUpdateUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["updateUser"]) @aws_api_key @aws_iam
+  onDeleteUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["deleteUser"]) @aws_api_key @aws_iam
+  onCreateLesson(filter: ModelSubscriptionLessonFilterInput): Lesson @aws_subscribe(mutations: ["createLesson"]) @aws_api_key @aws_iam
+  onUpdateLesson(filter: ModelSubscriptionLessonFilterInput): Lesson @aws_subscribe(mutations: ["updateLesson"]) @aws_api_key @aws_iam
+  onDeleteLesson(filter: ModelSubscriptionLessonFilterInput): Lesson @aws_subscribe(mutations: ["deleteLesson"]) @aws_api_key @aws_iam
+  onCreateUserLesson(filter: ModelSubscriptionUserLessonFilterInput): UserLesson @aws_subscribe(mutations: ["createUserLesson"]) @aws_api_key @aws_iam
+  onUpdateUserLesson(filter: ModelSubscriptionUserLessonFilterInput): UserLesson @aws_subscribe(mutations: ["updateUserLesson"]) @aws_api_key @aws_iam
+  onDeleteUserLesson(filter: ModelSubscriptionUserLessonFilterInput): UserLesson @aws_subscribe(mutations: ["deleteUserLesson"]) @aws_api_key @aws_iam
+}
+
+type ModelLessonConnection @aws_api_key @aws_iam {
+  items: [Lesson]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelLessonFilterInput {
+  id: ModelIDInput
+  level: ModelIntInput
+  video: ModelStringInput
+  and: [ModelLessonFilterInput]
+  or: [ModelLessonFilterInput]
+  not: ModelLessonFilterInput
+}
+
+input ModelLessonConditionInput {
+  level: ModelIntInput
+  video: ModelStringInput
+  and: [ModelLessonConditionInput]
+  or: [ModelLessonConditionInput]
+  not: ModelLessonConditionInput
+}
+
+input CreateLessonInput {
+  id: ID
+  level: Int
+  video: AWSURL
+  _version: Int
+}
+
+input UpdateLessonInput {
+  id: ID!
+  level: Int
+  video: AWSURL
+  _version: Int
+}
+
+input DeleteLessonInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionLessonFilterInput {
+  id: ModelSubscriptionIDInput
+  level: ModelSubscriptionIntInput
+  video: ModelSubscriptionStringInput
+  and: [ModelSubscriptionLessonFilterInput]
+  or: [ModelSubscriptionLessonFilterInput]
+}
+
+type ModelUserLessonConnection @aws_iam @aws_api_key {
+  items: [UserLesson]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelUserLessonFilterInput {
+  id: ModelIDInput
+  userId: ModelIDInput
+  lessonId: ModelIDInput
+  and: [ModelUserLessonFilterInput]
+  or: [ModelUserLessonFilterInput]
+  not: ModelUserLessonFilterInput
+}
+
+input ModelUserLessonConditionInput {
+  userId: ModelIDInput
+  lessonId: ModelIDInput
+  and: [ModelUserLessonConditionInput]
+  or: [ModelUserLessonConditionInput]
+  not: ModelUserLessonConditionInput
+}
+
+input CreateUserLessonInput {
+  id: ID
+  userId: ID!
+  lessonId: ID!
+  _version: Int
+}
+
+input UpdateUserLessonInput {
+  id: ID!
+  userId: ID
+  lessonId: ID
+  _version: Int
+}
+
+input DeleteUserLessonInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionUserLessonFilterInput {
+  id: ModelSubscriptionIDInput
+  userId: ModelSubscriptionIDInput
+  lessonId: ModelSubscriptionIDInput
+  and: [ModelSubscriptionUserLessonFilterInput]
+  or: [ModelSubscriptionUserLessonFilterInput]
+}
+

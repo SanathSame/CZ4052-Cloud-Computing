@@ -1,0 +1,110 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-signsensei-staging-115038-authRole",
+      "UnauthRoleArn": "arn:aws:iam::080062018042:role/amplify-signsensei-staging-115038-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::080062018042:role/amplify-signsensei-staging-115038-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-signsensei-staging-115038-deployment",
+      "UnauthRoleName": "amplify-signsensei-staging-115038-unauthRole",
+      "StackName": "amplify-signsensei-staging-115038",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:080062018042:stack/amplify-signsensei-staging-115038/981a5790-cc95-11ed-8bb9-02757d34bda2",
+      "AmplifyAppId": "dqtwsm1v9a09"
+    }
+  },
+  "api": {
+    "SignSensei": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
+            },
+            "authenticationType": "API_KEY"
+          }
+        },
+        "GraphQLAPIIdOutput": "f3y4dfksczfqrkonshbvxizkge",
+        "GraphQLAPIEndpointOutput": "https://zztl4sepkraqlgkgevrdz5axsu.appsync-api.ap-southeast-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-mw6kjkkxcrd5xefiiron3li6ae"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync",
+      "lastPushTimeStamp": "2023-04-04T12:09:43.319Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-signsensei-staging-115038-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apiSignSensei"
+      }
+    }
+  },
+  "auth": {
+    "SignSensei": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS",
+            "REQUIRES_UPPERCASE"
+          ]
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "output": {
+        "UserPoolId": "ap-southeast-1_zpSY6vlHq",
+        "AppClientIDWeb": "5mqn192j6ta1ptm1o8v7v3rklh",
+        "AppClientID": "5avuqr0nn27calplnqmosa50l",
+        "IdentityPoolId": "ap-southeast-1:b9359fbf-1ebd-4c95-9627-0b110eb7426d",
+        "UserPoolArn": "arn:aws:cognito-idp:ap-southeast-1:080062018042:userpool/ap-southeast-1_zpSY6vlHq",
+        "IdentityPoolName": "testAuthIdentityPool__staging",
+        "UserPoolName": "SignSensei"
+      },
+      "lastPushTimeStamp": "2023-04-04T12:09:43.340Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-signsensei-staging-115038-deployment/amplify-cfn-templates/auth/SignSensei-cloudformation-template.json",
+        "logicalId": "authSignSensei"
+      }
+    }
+  },
+  "storage": {
+    "s3signsenseistorage422827ee": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3",
+      "output": {
+        "BucketName": "signsensei-storage-422827ee115038-staging",
+        "Region": "ap-southeast-1"
+      },
+      "lastPushTimeStamp": "2023-04-04T12:09:49.902Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-signsensei-staging-115038-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storages3signsenseistorage422827ee"
+      },
+      "lastPushDirHash": "XoeD+TXVgqW8LKpo4UqPLBo6Ygw="
+    }
+  }
+}
