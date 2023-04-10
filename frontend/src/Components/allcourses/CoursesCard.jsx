@@ -1,6 +1,7 @@
 import React from 'react'
 import { coursesCard } from '../../dummydata'
 import './courses.css'
+import { Link } from 'react-router-dom'
 
 const CoursesCard = () => {
     return (
@@ -21,9 +22,11 @@ const CoursesCard = () => {
                                     </div>
                                 </div>
                                 <div className="price">
-                                    <img src='/public/images/Course1.jpg' alt='Letter'/>
+                                    <img src='/public/images/Course1.jpg' alt='Letter' />
                                 </div>
-                                <button className="outline-btn">LEARN</button>
+                                <Link to='/lesson'>
+                                    <button className="outline-btn">LEARN</button>
+                                </Link>
                             </div>
                         )
                     })}

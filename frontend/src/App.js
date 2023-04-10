@@ -6,7 +6,7 @@ import Coursehome from './Components/allcourses/Coursehome';
 import Profile from './Components/team/Profile';
 import Contribute from './Components/contact/Contribute';
 import Login from './Components/Login/Login';
-
+import Lessons from './Components/allcourses/Lessons';
 const App = () => {
   return (
     <>
@@ -14,9 +14,10 @@ const App = () => {
         <Routes>
           <Route path='/login' exact element={<Login />} />
           <Route path='/' exact element={<Home />} />
-          <Route path='/learn'  element={<Coursehome />} />
-          <Route path='/profile'  element={<Profile />} />
-          <Route path='/contribute'  element={<Contribute />} />
+          <Route path='/learn' element={<Coursehome />} />
+          <Route path='/lesson' element={<Lessons />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/contribute' element={<Contribute />} />
         </Routes>
       </Router>
     </>
