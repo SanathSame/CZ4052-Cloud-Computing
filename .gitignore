@@ -30,3 +30,5 @@ amplifytools.xcconfig
 #amplify-do-not-edit-end
 
 user_pwd
+s3_url
+test.html

@@ -93,7 +93,6 @@ def clean_frame_dirs():
                                 # Uncomment after unzip
                                 # os.remove(os.path.join(subsubroot, file))
 
-
 def get_test():
     for root, dirs, _ in os.walk("archive/frames"):
         for dir in dirs:
