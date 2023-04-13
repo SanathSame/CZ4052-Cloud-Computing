@@ -9,6 +9,8 @@ import Contribute from "./Components/contact/Contribute";
 import Login from "./Components/Login/Login";
 import Lessons from "./Components/allcourses/Lessons";
 
+import env from "react-dotenv";
+
 import { Amplify, Storage } from "aws-amplify";
 
 import "@aws-amplify/ui-react/styles.css";
@@ -19,6 +21,7 @@ import { Authenticator } from "@aws-amplify/ui-react";
 Amplify.configure(awsExports);
 
 const AppRoutes = () => {
+  console.log(process.env.REACT_APP_CDN_URL);
   return (
     <Router>
       <Routes>
@@ -36,7 +39,7 @@ const AppRoutes = () => {
           path="/lessons"
           element={
             <RequireAuth>
-              <Lessons />
+              <Lessons CDN_URL={process.env.REACT_APP_CDN_URL} />
             </RequireAuth>
           }
         />
