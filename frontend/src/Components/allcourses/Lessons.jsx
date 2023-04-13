@@ -29,12 +29,7 @@ function Lessons() {
             <div className="card-body">
               <h5 className="card-title text-center text-truncate">{letter}</h5>
               <div className="d-grid">
-                <button
-                  className="btn btn-outline-dark mt-3"
-                  onClick={handleWatchClick}
-                >
-                  Watch
-                </button>
+                <button onClick={handleWatchClick}>Watch</button>
               </div>
             </div>
           </div>
