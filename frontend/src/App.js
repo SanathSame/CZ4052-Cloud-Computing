@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Components/home/Home";
@@ -7,6 +7,7 @@ import Profile from "./Components/team/Profile";
 import { RequireAuth } from "./Components/middleware/RequireAuth";
 import Contribute from "./Components/contact/Contribute";
 import Login from "./Components/Login/Login";
+import Lessons from "./Components/allcourses/Lessons";
 
 import { Amplify, Storage } from "aws-amplify";
 
@@ -14,7 +15,6 @@ import "@aws-amplify/ui-react/styles.css";
 import "./ui-components/index";
 
 import awsExports from "./aws-exports";
-import { useState } from "react";
 import { Authenticator } from "@aws-amplify/ui-react";
 Amplify.configure(awsExports);
 
@@ -29,6 +29,14 @@ const AppRoutes = () => {
           element={
             <RequireAuth>
               <Coursehome />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/lessons"
+          element={
+            <RequireAuth>
+              <Lessons />
             </RequireAuth>
           }
         />
