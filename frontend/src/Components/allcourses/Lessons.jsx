@@ -4,7 +4,6 @@ import Footer from "../common/footer/Footer";
 import "./videos.css";
 import Back from "../common/back/Back";
 import { Storage } from "aws-amplify";
-import { ComponentPropsToStylePropsMapKeys } from "@aws-amplify/ui-react";
 
 function Lessons({ CDN_URL }) {
   const [showVideo, setShowVideo] = useState(false);
@@ -83,7 +82,7 @@ function Lessons({ CDN_URL }) {
             <div className="video-popup">
               <div className="video-popup-overlay" onClick={handleCloseClick} />
               <div className="video-popup-content">
-                <video src={URL} controls />
+                <video src={URL} autoplay controls />
               </div>
             </div>
           )}
@@ -101,10 +100,11 @@ function Lessons({ CDN_URL }) {
       <div className="lessons-page">
         <h1>ASL Learning Lessons</h1>
         <div class="d-flex justify-content-around flex-wrap">
-          {letters.map((letter) => {
-            // console.log(CDN_URL);
-            return <LessonCard cardLetter={letter} videoUrl={CDN_URL} />;
-          })}
+          {data.length &&
+            letters.map((letter) => {
+              // console.log(CDN_URL);
+              return <LessonCard cardLetter={letter} videoUrl={CDN_URL} />;
+            })}
           ;
         </div>
       </div>

@@ -8,6 +8,7 @@ import { RequireAuth } from "./Components/middleware/RequireAuth";
 import Contribute from "./Components/contact/Contribute";
 import Login from "./Components/Login/Login";
 import Lessons from "./Components/allcourses/Lessons";
+import WebcamVideo from "./Components/allcourses/WebCamVideo";
 
 import env from "react-dotenv";
 
@@ -18,6 +19,7 @@ import "./ui-components/index";
 
 import awsExports from "./aws-exports";
 import { Authenticator } from "@aws-amplify/ui-react";
+import Quizzes from "./Components/allcourses/Quizzes";
 Amplify.configure(awsExports);
 
 const AppRoutes = () => {
@@ -44,6 +46,14 @@ const AppRoutes = () => {
           }
         />
         <Route
+          path="/quizzes"
+          element={
+            <RequireAuth>
+              <Quizzes />
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/profile"
           element={
             <RequireAuth>
@@ -59,37 +69,15 @@ const AppRoutes = () => {
             </RequireAuth>
           }
         />
+        <Route path="/record-video" element={<WebcamVideo />} />
       </Routes>
     </Router>
   );
 };
 
-function App({ signOut, user }) {
-  const [fileData, setFileData] = useState();
-  const [fileStatus, setFileStatus] = useState(false);
-  const [loginStatus, setLoginStatus] = useState(false);
-
-  const uploadFile = async () => {
-    const result = await Storage.put(fileData.name, fileData, {
-      contentType: fileData.type,
-    });
-    setFileStatus(true);
-    console.log(result);
-  };
-
+function App() {
   return (
     <>
-      {/* <Heading level={3}>
-          Hello {loginStatus ? user.username + "!" : "Guest!"}
-        </Heading>
-        <div>
-          <input type="file" onChange={(e) => setFileData(e.target.files[0])} />
-        </div>
-        <button onClick={uploadFile}>Upload file</button>
-        <Text>{fileStatus ? "File uploaded successfully" : ""}</Text>
-        <button onClick={() => setShowAuthentication(!showAuthentication)}>
-          Close dialog
-        </button> */}
       <Authenticator.Provider>
         <AppRoutes />
       </Authenticator.Provider>
