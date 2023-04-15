@@ -5,7 +5,5 @@
  **************************************************************************/
 
 export { default as studioTheme } from "./studioTheme";
-export { default as UserCreateForm } from "./UserCreateForm";
-export { default as UserUpdateForm } from "./UserUpdateForm";
-export { default as LessonCreateForm } from "./LessonCreateForm";
-export { default as LessonUpdateForm } from "./LessonUpdateForm";
+export { default as LabelCreateForm } from "./LabelCreateForm";
+export { default as LabelUpdateForm } from "./LabelUpdateForm";

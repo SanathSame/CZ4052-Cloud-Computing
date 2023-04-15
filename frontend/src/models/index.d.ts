@@ -1,103 +1,37 @@
 import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-amplify/datastore";
 // @ts-ignore
-import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
+import { LazyLoading, LazyLoadingDisabled } from "@aws-amplify/datastore";
 
 
 
 
 
-type EagerUser = {
+type EagerLabel = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<User, 'id'>;
+    identifier: ManagedIdentifier<Label, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly email: string;
-  readonly UserToLesson?: (UserLesson | null)[] | null;
+  readonly S3_path?: string | null;
+  readonly labels?: (boolean | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-type LazyUser = {
+type LazyLabel = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<User, 'id'>;
+    identifier: ManagedIdentifier<Label, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly email: string;
-  readonly UserToLesson: AsyncCollection<UserLesson>;
+  readonly S3_path?: string | null;
+  readonly labels?: (boolean | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-export declare type User = LazyLoading extends LazyLoadingDisabled ? EagerUser : LazyUser
+export declare type Label = LazyLoading extends LazyLoadingDisabled ? EagerLabel : LazyLabel
 
-export declare const User: (new (init: ModelInit<User>) => User) & {
-  copyOf(source: User, mutator: (draft: MutableModel<User>) => MutableModel<User> | void): User;
-}
-
-type EagerLesson = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Lesson, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly level?: number | null;
-  readonly video?: string | null;
-  readonly users?: (UserLesson | null)[] | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyLesson = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Lesson, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly level?: number | null;
-  readonly video?: string | null;
-  readonly users: AsyncCollection<UserLesson>;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type Lesson = LazyLoading extends LazyLoadingDisabled ? EagerLesson : LazyLesson
-
-export declare const Lesson: (new (init: ModelInit<Lesson>) => Lesson) & {
-  copyOf(source: Lesson, mutator: (draft: MutableModel<Lesson>) => MutableModel<Lesson> | void): Lesson;
-}
-
-type EagerUserLesson = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<UserLesson, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly userId?: string | null;
-  readonly lessonId?: string | null;
-  readonly user: User;
-  readonly lesson: Lesson;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyUserLesson = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<UserLesson, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly userId?: string | null;
-  readonly lessonId?: string | null;
-  readonly user: AsyncItem<User>;
-  readonly lesson: AsyncItem<Lesson>;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type UserLesson = LazyLoading extends LazyLoadingDisabled ? EagerUserLesson : LazyUserLesson
-
-export declare const UserLesson: (new (init: ModelInit<UserLesson>) => UserLesson) & {
-  copyOf(source: UserLesson, mutator: (draft: MutableModel<UserLesson>) => MutableModel<UserLesson> | void): UserLesson;
+export declare const Label: (new (init: ModelInit<Label>) => Label) & {
+  copyOf(source: Label, mutator: (draft: MutableModel<Label>) => MutableModel<Label> | void): Label;
 }
