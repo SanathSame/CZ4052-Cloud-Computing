@@ -7,7 +7,7 @@ import "./header.css";
 const Header = () => {
   const navigate = useNavigate();
   const [click, setClick] = useState(false);
-  const { route, signOut } = useAuthenticator((context) => [
+  const { signOut } = useAuthenticator((context) => [
     context.route,
     context.signOut,
   ]);
@@ -19,45 +19,31 @@ const Header = () => {
   return (
     <>
       <Head />
-      <header>
+      <header style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
         <nav className="flexSB">
-          <ul
-            className={click ? "mobile-nav" : "flexSB"}
-            onClick={() => setClick(false)}
-          >
-            {/* <li><Link to='/'>Home</Link></li> */}
-            <li>
-              <Link to="/learn">Learn</Link>
-            </li>
-            <li>
-              <Link to="/quizzes">Quizzes</Link>
-            </li>
-            <li>
-              <Link to="/contribute">Contribute</Link>
-            </li>
-            <li>
-              <Link to="/profile">Profile</Link>
-            </li>
-            <Button
-              onClick={() => logOut()}
-              variation="menu"
-              style={{ color: "white" }}
-            >
-              Logout
-            </Button>
-          </ul>
+          <div style={{ flexGrow: 1 }}>
+            <ul className={click ? "mobile-nav" : "flexSB"} onClick={() => setClick(false)}>
+              {/* <li><Link to='/' style={{ textDecoration: 'none' }}>Home</Link></li> */}
+              <li>
+                <Link to="/learn" style={{ textDecoration: 'none' }}>Learn</Link>
+              </li>
+              <li>
+                <Link to="/quizzeshome" style={{ textDecoration: 'none' }}>Quizzes</Link>
+              </li>
+              <li>
+                <Link to="/contribute" style={{ textDecoration: 'none' }}>Contribute</Link>
+              </li>
+              <li>
+                <Link to="/profile" style={{ textDecoration: 'none' }}>Profile</Link>
+              </li>
+              <li onClick={logOut}>
+                <Link style={{ textDecoration: 'none' }}>Logout</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="flexSB">
 
-          <Button
-            onClick={() => setClick(!click)}
-            variation="menu"
-            style={{ color: "white" }}
-          >
-            {click ? (
-              <i className="fa fa-times"></i>
-            ) : (
-              <i className="fa fa-bars"></i>
-            )}
-          </Button>
+          </div>
         </nav>
       </header>
     </>

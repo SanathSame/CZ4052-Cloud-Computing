@@ -7,10 +7,10 @@ import Footer from '../common/footer/Footer'
 const Learn = () => {
   return (
     <>
-    <Header/>
-        <Back title='Learn' />
-        <CoursesCard />
-    <Footer/>
+      <Header />
+      <Back title='Learn' />
+      <CoursesCard />
+      <Footer />
     </>
   )
 }

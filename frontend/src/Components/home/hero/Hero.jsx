@@ -30,10 +30,7 @@ function Hero() {
             </p>
             <div className="button">
               <button onClick={handleLogin}>
-                LOGIN<i className="fa fa-long-arrow-alt-right"></i>
-              </button>
-              <button onClick={handleSignUp}>
-                SIGN UP<i className="fa fa-long-arrow-alt-right"></i>
+                GET STARTED <i className="fa fa-long-arrow-alt-right"></i>
               </button>
             </div>
           </div>

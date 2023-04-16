@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { coursesCard } from "../../dummydata";
 import "./courses.css";
+import { Button } from "@aws-amplify/ui-react";
 
 const CoursesCard = () => {
   return (
@@ -22,9 +23,8 @@ const CoursesCard = () => {
                   </div>
                 </div>
                 <div className="price">
-                  <img src="/public/images/Course1.jpg" alt="Letter" />
                 </div>
-                <Link to="/lessons">LEARN</Link>
+                <Link to="/lessons"><Button>LEARN</Button></Link>
               </div>
             );
           })}
