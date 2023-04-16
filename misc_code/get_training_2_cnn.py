@@ -1,22 +1,27 @@
 import json
-import numpy as np
-import pandas as pd
-from PIL import Image
-from random import shuffle, choice
 import os
 import shutil
-import cv2
+from random import choice, shuffle
 
+import cv2
+import keras
+import numpy as np
+import pandas as pd
 import tensorflow as tf
-from keras.models import Sequential
-from keras.layers import Dense, Conv2D , MaxPool2D , Flatten , Dropout , BatchNormalization
-from keras.layers import Input, Add, Dense, Activation, BatchNormalization, Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D, Dropout
 from keras import Model
 from keras.applications import ResNet50
+from keras.layers import (LSTM, Activation, Add, AveragePooling2D,
+                          BatchNormalization, Conv2D, Conv3D, Dense, Dropout, Flatten,
+                          GlobalAveragePooling2D, GlobalMaxPooling2D, Input,
+                          Lambda, MaxPool2D, MaxPooling2D, MaxPooling3D, TimeDistributed,
+                          concatenate, Rescaling)
+from keras.models import Sequential
+from keras.preprocessing.image import ImageDataGenerator
+from PIL import Image
 
 import new_mediapipe_hands
 
-INPUT_SIZE = (224, 224, 3)
+INPUT_SIZE = (28, 28, 3)
 
 def parse_json(): #converts the json file into a pandas datatype
     
@@ -129,99 +134,93 @@ def get_train():
                                 os.makedirs(os.path.join("archive/split/train", dir))
                             os.symlink(os.path.abspath(os.path.join(root, dir, subdir, file)), os.path.join("archive/split/train", dir, subdir + "_" + file))
 
-def get_model(input_size):
-    model_res = ResNet50(include_top=True, input_shape=input_size, weights='imagenet')
-    # take the last global average pooling with fewer parameters
-    x = model_res.layers[-2].output
-    
-    x = Dense(2048)(x)
-    x = Activation('relu')(x)
-    x = Dropout(.5)(x)
-    
-    x = Dense(2048)(x)
-    x = Activation('relu')(x)
-    x = Dropout(.5)(x)
-    
-    x = Dense(28)(x)
-    outputs = Activation('softmax')(x)
+def get_2_stream_cnn_model(INPUT_SIZE):
+    # define spatial input stream
+    spatial_input = Input(shape=INPUT_SIZE)
+    x = Conv2D(32, (3, 3), activation='relu')(spatial_input)
+    x = MaxPooling2D((2, 2))(x)
+    x = Dropout(0.25)(x)
+    x = Flatten()(x)
+    x = Dense(64, activation='relu')(x)
+    x = Dropout(0.5)(x)
+    spatial_output = Dense(28, activation='softmax')(x)
 
-    model = Model(model_res.input, outputs)
+    # define temporal input stream
+    temporal_input = Input(shape=(5, *INPUT_SIZE))
+    x = Conv3D(32, (3, 3, 3), activation='relu')(temporal_input)
+    x = MaxPooling3D((2, 2, 2))(x)
+    x = Dropout(0.25)(x)
+    x = Flatten()(x)
+    x = Dense(64, activation='relu')(x)
+    x = Dropout(0.5)(x)
+    temporal_output = Dense(28, activation='softmax')(x)
+
+    # concatenate spatial and temporal streams
+    merged = concatenate([spatial_output, temporal_output])
+
+    # create the model
+    model = Model(inputs=[spatial_input, temporal_input], outputs=merged)    
     return model
-
-def get_simple_model(input_size):
-    model = Sequential()
-    model.add(Conv2D(75 , (3,3) , strides=1 , padding='same' , activation='relu' , input_shape=input_size))
-    model.add(BatchNormalization())
-    model.add(MaxPool2D((2,2) , strides=2 , padding='same'))
-    model.add(Conv2D(50 , (3,3) , strides=1 , padding='same' , activation='relu'))
-    model.add(Dropout(0.2))
-    model.add(BatchNormalization())
-    model.add(MaxPool2D((2,2) , strides=2 , padding='same'))
-    model.add(Conv2D(25 , (3,3) , strides=1 , padding='same' , activation='relu'))
-    model.add(BatchNormalization())
-    model.add(MaxPool2D((2,2) , strides=2 , padding='same'))
-    model.add(Flatten())
-    model.add(Dense(units=512 , activation='relu'))
-    model.add(Dropout(0.3))
-    model.add(Dense(units=28 , activation='softmax'))
-    model.compile(optimizer='adam' , loss='categorical_crossentropy' , metrics=['accuracy'])
-    model.summary()
-    return model
-
 
 def train_model():
     train_dir = "archive/split/train"
-    train_dataset = tf.keras.preprocessing.image_dataset_from_directory(train_dir, 
-                                                                    labels='inferred', 
-                                                                    label_mode='categorical',
-                                                                    batch_size=32,
-                                                                    image_size=INPUT_SIZE[:-1],
-                                                                    validation_split=0.2,
-                                                                    subset="training",
-                                                                    seed=42)
-    val_dataset = tf.keras.preprocessing.image_dataset_from_directory(train_dir, 
-                                                                    labels='inferred', 
-                                                                    label_mode='categorical',
-                                                                    batch_size=32,
-                                                                    image_size=INPUT_SIZE[:-1],
-                                                                    validation_split=0.2,
-                                                                    subset="validation",
-                                                                    seed=42)
-    print(train_dataset.class_names)
+    
+    spatial_data_gen = ImageDataGenerator(preprocessing_function=tf.keras.applications.mobilenet_v2.preprocess_input, validation_split=0.2)
+    temporal_data_gen = ImageDataGenerator(preprocessing_function=tf.keras.applications.mobilenet_v2.preprocess_input, validation_split=0.2)
 
-    # for batch_X, batch_y in train_dataset.take(1):
-    #     print(batch_X.shape)
-    #     print(batch_y.shape)
+    # Create the spatial and temporal data sets
+    train_spatial_data_set = spatial_data_gen.flow_from_directory(
+        train_dir,
+        target_size=INPUT_SIZE[:-1],
+        batch_size=32,
+        class_mode='categorical',
+        shuffle=True,
+        subset='training',
+        seed=42        
+    )
+    val_spatial_data_set = spatial_data_gen.flow_from_directory(
+        train_dir,
+        target_size=INPUT_SIZE[:-1],
+        batch_size=32,
+        class_mode='categorical',
+        shuffle=True,
+        subset='validation',
+        seed=42       
+    )
+    train_temporal_data_set = temporal_data_gen.flow_from_directory(
+        train_dir,
+        target_size=INPUT_SIZE[:-1],
+        batch_size=32*5,
+        class_mode='categorical',
+        shuffle=True,
+        subset='training',
+        seed=42
+    )
+    val_temporal_data_set = temporal_data_gen.flow_from_directory(
+        train_dir,
+        target_size=INPUT_SIZE[:-1],
+        batch_size=32*5,
+        class_mode='categorical',
+        shuffle=True,
+        subset='validation',
+        seed=42
+    )
 
-    norm_layer = tf.keras.layers.experimental.preprocessing.Rescaling(1/255.)
-
-    norm_train_dataset = train_dataset.map(lambda x, y: (norm_layer(x), y))
-    norm_val_dataset = val_dataset.map(lambda x, y: (norm_layer(x), y))
-    # norm_test_dataset = test_dataset.map(lambda x: norm_layer(x))
-
-    # for b_X, b_y in norm_train_dataset:
-    #     print('batch X shape', b_X.shape)
-    #     print('batch y shape', b_y.shape)
-    #     print(f'max {np.max(b_X[0])}  min {np.min(b_X[0])}')
-    #     break
-
-    model = get_simple_model(INPUT_SIZE)
-
-    # model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-    # model.summary()
-
-    # callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
+    model = get_2_stream_cnn_model(INPUT_SIZE)
+    model.compile(loss='categorical_crossentropy',
+              optimizer=keras.optimizers.SGD(learning_rate=0.05, momentum=0.9),
+              metrics=['accuracy'])
+    model.summary()
+    callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
     checkpoint = tf.keras.callbacks.ModelCheckpoint('models/tmp/checkpoint', monitor='val_accuracy', save_best_only=True)
-    model.fit(norm_train_dataset, validation_data=norm_val_dataset, epochs=10, callbacks=[checkpoint])
-    model.save("models/simple_video_model_size224.h5")
-
-
-def load(filename):
-   np_image = cv2.imread(filename)
-#    np_image = np.array(np_image).astype('float32')/255
-   np_image = cv2.resize(np_image, INPUT_SIZE[:-1])
-#    np_image = np.expand_dims(np_image, axis=0)
-   return np_image
+    history = model.fit_generator(zip(train_spatial_data_set, train_temporal_data_set),
+                        epochs=10,
+                        verbose=1,
+                        steps_per_epoch=len(train_spatial_data_set),
+                        validation_data=(val_spatial_data_set, val_temporal_data_set),
+                        validation_steps=len(val_spatial_data_set),
+                        callbacks=[checkpoint, callback])
+    model.save("models/2_stream_cnn.h5")
 
 def test_model():
     test_dir = "archive/split/test"
@@ -230,7 +229,8 @@ def test_model():
                                                                   label_mode='categorical',
                                                                   batch_size=32,
                                                                   image_size=INPUT_SIZE[:-1])
-    print(test_dataset.class_names)
+    print({k: label for k, label in enumerate(test_dataset.class_names)})
+    # print(test_dataset.class_indices)
 
     norm_layer = tf.keras.layers.experimental.preprocessing.Rescaling(1/255.)
 
@@ -244,7 +244,7 @@ def test_model():
     # cv2.imshow("test_image", image)
     # cv2.waitKey(0)
 
-    model = tf.keras.models.load_model('models/simple_video_model_size224.h5')
+    model = tf.keras.models.load_model('models/simple_video_model.h5')
     test_pred = model.predict(norm_test_dataset)
 
     # print("Prediction:", test_pred)
@@ -272,5 +272,5 @@ if __name__ == "__main__":
     # get_test()
     # get_train()
     train_model()
-    test_model()
+    # test_model()
     pass

@@ -1,0 +1,22 @@
+ORIG_20_CLASSES = {
+    0: "Bellissima",
+    1: "Madonna",
+    2: "NonMiFrega",
+    3: "SeiPazzo",
+    4: "VieniQua",
+    5: "Thunderstorm",
+    6: "Earthquake",
+    7: "Moon",
+    8: "Volcano",
+    9: "River",
+    10: "Bird",
+    11: "Butterfly", 
+    12: "Cat",
+    13: "Dog", 
+    14: "Space",
+    15: "Harbour",
+    16: "LiftOff",
+    17: "SpeedItUp",
+    18: "StartTheEngine",
+    19: "StopTheEngine"
+}
