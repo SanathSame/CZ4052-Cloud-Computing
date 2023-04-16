@@ -1,12 +1,6 @@
-type User @model @auth(rules: [{allow: public}]) {
+type Label @model @auth(rules: [{allow: public}]) {
   id: ID!
-  email: AWSEmail!
-  UserToLesson: [Lesson] @manyToMany(relationName: "UserLesson")
+  S3_path: String
+  labels: [Boolean]
 }
-
-type Lesson @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  level: Int
-  video: AWSURL
-  users: [User] @manyToMany(relationName: "UserLesson")
-}
+ 

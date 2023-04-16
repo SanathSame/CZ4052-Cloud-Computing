@@ -1,33 +1,8 @@
 
-type User @aws_iam @aws_api_key {
+type Label @aws_iam @aws_api_key {
   id: ID!
-  email: AWSEmail!
-  UserToLesson(filter: ModelUserLessonFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUserLessonConnection
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
-  _version: Int!
-  _deleted: Boolean
-  _lastChangedAt: AWSTimestamp!
-}
-
-type Lesson @aws_iam @aws_api_key {
-  id: ID!
-  level: Int
-  video: AWSURL
-  users(filter: ModelUserLessonFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUserLessonConnection
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
-  _version: Int!
-  _deleted: Boolean
-  _lastChangedAt: AWSTimestamp!
-}
-
-type UserLesson @aws_iam @aws_api_key {
-  id: ID!
-  userId: ID!
-  lessonId: ID!
-  user: User!
-  lesson: Lesson!
+  S3_path: String
+  labels: [Boolean]
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
   _version: Int!
@@ -185,186 +160,71 @@ enum ModelSortDirection {
   DESC
 }
 
-type ModelUserConnection @aws_api_key @aws_iam {
-  items: [User]!
+type ModelLabelConnection @aws_api_key @aws_iam {
+  items: [Label]!
   nextToken: String
   startedAt: AWSTimestamp
 }
 
-input ModelUserFilterInput {
+input ModelLabelFilterInput {
   id: ModelIDInput
-  email: ModelStringInput
-  and: [ModelUserFilterInput]
-  or: [ModelUserFilterInput]
-  not: ModelUserFilterInput
+  S3_path: ModelStringInput
+  labels: ModelBooleanInput
+  and: [ModelLabelFilterInput]
+  or: [ModelLabelFilterInput]
+  not: ModelLabelFilterInput
 }
 
 type Query {
-  getUser(id: ID!): User @aws_api_key @aws_iam
-  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection @aws_api_key @aws_iam
-  syncUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelUserConnection @aws_api_key @aws_iam
-  getLesson(id: ID!): Lesson @aws_api_key @aws_iam
-  listLessons(filter: ModelLessonFilterInput, limit: Int, nextToken: String): ModelLessonConnection @aws_api_key @aws_iam
-  syncLessons(filter: ModelLessonFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelLessonConnection @aws_api_key @aws_iam
-  getUserLesson(id: ID!): UserLesson @aws_api_key @aws_iam
-  listUserLessons(filter: ModelUserLessonFilterInput, limit: Int, nextToken: String): ModelUserLessonConnection @aws_api_key @aws_iam
-  syncUserLessons(filter: ModelUserLessonFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelUserLessonConnection @aws_api_key @aws_iam
-  userLessonsByUserId(userId: ID!, sortDirection: ModelSortDirection, filter: ModelUserLessonFilterInput, limit: Int, nextToken: String): ModelUserLessonConnection @aws_api_key @aws_iam
-  userLessonsByLessonId(lessonId: ID!, sortDirection: ModelSortDirection, filter: ModelUserLessonFilterInput, limit: Int, nextToken: String): ModelUserLessonConnection @aws_api_key @aws_iam
+  getLabel(id: ID!): Label @aws_api_key @aws_iam
+  listLabels(filter: ModelLabelFilterInput, limit: Int, nextToken: String): ModelLabelConnection @aws_api_key @aws_iam
+  syncLabels(filter: ModelLabelFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelLabelConnection @aws_api_key @aws_iam
 }
 
-input ModelUserConditionInput {
-  email: ModelStringInput
-  and: [ModelUserConditionInput]
-  or: [ModelUserConditionInput]
-  not: ModelUserConditionInput
+input ModelLabelConditionInput {
+  S3_path: ModelStringInput
+  labels: ModelBooleanInput
+  and: [ModelLabelConditionInput]
+  or: [ModelLabelConditionInput]
+  not: ModelLabelConditionInput
 }
 
-input CreateUserInput {
+input CreateLabelInput {
   id: ID
-  email: AWSEmail!
+  S3_path: String
+  labels: [Boolean]
   _version: Int
 }
 
-input UpdateUserInput {
+input UpdateLabelInput {
   id: ID!
-  email: AWSEmail
+  S3_path: String
+  labels: [Boolean]
   _version: Int
 }
 
-input DeleteUserInput {
+input DeleteLabelInput {
   id: ID!
   _version: Int
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
-  updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
-  deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
-  createLesson(input: CreateLessonInput!, condition: ModelLessonConditionInput): Lesson @aws_api_key @aws_iam
-  updateLesson(input: UpdateLessonInput!, condition: ModelLessonConditionInput): Lesson @aws_api_key @aws_iam
-  deleteLesson(input: DeleteLessonInput!, condition: ModelLessonConditionInput): Lesson @aws_api_key @aws_iam
-  createUserLesson(input: CreateUserLessonInput!, condition: ModelUserLessonConditionInput): UserLesson @aws_api_key @aws_iam
-  updateUserLesson(input: UpdateUserLessonInput!, condition: ModelUserLessonConditionInput): UserLesson @aws_api_key @aws_iam
-  deleteUserLesson(input: DeleteUserLessonInput!, condition: ModelUserLessonConditionInput): UserLesson @aws_api_key @aws_iam
+  createLabel(input: CreateLabelInput!, condition: ModelLabelConditionInput): Label @aws_api_key @aws_iam
+  updateLabel(input: UpdateLabelInput!, condition: ModelLabelConditionInput): Label @aws_api_key @aws_iam
+  deleteLabel(input: DeleteLabelInput!, condition: ModelLabelConditionInput): Label @aws_api_key @aws_iam
 }
 
-input ModelSubscriptionUserFilterInput {
+input ModelSubscriptionLabelFilterInput {
   id: ModelSubscriptionIDInput
-  email: ModelSubscriptionStringInput
-  and: [ModelSubscriptionUserFilterInput]
-  or: [ModelSubscriptionUserFilterInput]
+  S3_path: ModelSubscriptionStringInput
+  labels: ModelSubscriptionBooleanInput
+  and: [ModelSubscriptionLabelFilterInput]
+  or: [ModelSubscriptionLabelFilterInput]
 }
 
 type Subscription {
-  onCreateUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["createUser"]) @aws_api_key @aws_iam
-  onUpdateUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["updateUser"]) @aws_api_key @aws_iam
-  onDeleteUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["deleteUser"]) @aws_api_key @aws_iam
-  onCreateLesson(filter: ModelSubscriptionLessonFilterInput): Lesson @aws_subscribe(mutations: ["createLesson"]) @aws_api_key @aws_iam
-  onUpdateLesson(filter: ModelSubscriptionLessonFilterInput): Lesson @aws_subscribe(mutations: ["updateLesson"]) @aws_api_key @aws_iam
-  onDeleteLesson(filter: ModelSubscriptionLessonFilterInput): Lesson @aws_subscribe(mutations: ["deleteLesson"]) @aws_api_key @aws_iam
-  onCreateUserLesson(filter: ModelSubscriptionUserLessonFilterInput): UserLesson @aws_subscribe(mutations: ["createUserLesson"]) @aws_api_key @aws_iam
-  onUpdateUserLesson(filter: ModelSubscriptionUserLessonFilterInput): UserLesson @aws_subscribe(mutations: ["updateUserLesson"]) @aws_api_key @aws_iam
-  onDeleteUserLesson(filter: ModelSubscriptionUserLessonFilterInput): UserLesson @aws_subscribe(mutations: ["deleteUserLesson"]) @aws_api_key @aws_iam
-}
-
-type ModelLessonConnection @aws_api_key @aws_iam {
-  items: [Lesson]!
-  nextToken: String
-  startedAt: AWSTimestamp
-}
-
-input ModelLessonFilterInput {
-  id: ModelIDInput
-  level: ModelIntInput
-  video: ModelStringInput
-  and: [ModelLessonFilterInput]
-  or: [ModelLessonFilterInput]
-  not: ModelLessonFilterInput
-}
-
-input ModelLessonConditionInput {
-  level: ModelIntInput
-  video: ModelStringInput
-  and: [ModelLessonConditionInput]
-  or: [ModelLessonConditionInput]
-  not: ModelLessonConditionInput
-}
-
-input CreateLessonInput {
-  id: ID
-  level: Int
-  video: AWSURL
-  _version: Int
-}
-
-input UpdateLessonInput {
-  id: ID!
-  level: Int
-  video: AWSURL
-  _version: Int
-}
-
-input DeleteLessonInput {
-  id: ID!
-  _version: Int
-}
-
-input ModelSubscriptionLessonFilterInput {
-  id: ModelSubscriptionIDInput
-  level: ModelSubscriptionIntInput
-  video: ModelSubscriptionStringInput
-  and: [ModelSubscriptionLessonFilterInput]
-  or: [ModelSubscriptionLessonFilterInput]
-}
-
-type ModelUserLessonConnection @aws_iam @aws_api_key {
-  items: [UserLesson]!
-  nextToken: String
-  startedAt: AWSTimestamp
-}
-
-input ModelUserLessonFilterInput {
-  id: ModelIDInput
-  userId: ModelIDInput
-  lessonId: ModelIDInput
-  and: [ModelUserLessonFilterInput]
-  or: [ModelUserLessonFilterInput]
-  not: ModelUserLessonFilterInput
-}
-
-input ModelUserLessonConditionInput {
-  userId: ModelIDInput
-  lessonId: ModelIDInput
-  and: [ModelUserLessonConditionInput]
-  or: [ModelUserLessonConditionInput]
-  not: ModelUserLessonConditionInput
-}
-
-input CreateUserLessonInput {
-  id: ID
-  userId: ID!
-  lessonId: ID!
-  _version: Int
-}
-
-input UpdateUserLessonInput {
-  id: ID!
-  userId: ID
-  lessonId: ID
-  _version: Int
-}
-
-input DeleteUserLessonInput {
-  id: ID!
-  _version: Int
-}
-
-input ModelSubscriptionUserLessonFilterInput {
-  id: ModelSubscriptionIDInput
-  userId: ModelSubscriptionIDInput
-  lessonId: ModelSubscriptionIDInput
-  and: [ModelSubscriptionUserLessonFilterInput]
-  or: [ModelSubscriptionUserLessonFilterInput]
+  onCreateLabel(filter: ModelSubscriptionLabelFilterInput): Label @aws_subscribe(mutations: ["createLabel"]) @aws_api_key @aws_iam
+  onUpdateLabel(filter: ModelSubscriptionLabelFilterInput): Label @aws_subscribe(mutations: ["updateLabel"]) @aws_api_key @aws_iam
+  onDeleteLabel(filter: ModelSubscriptionLabelFilterInput): Label @aws_subscribe(mutations: ["deleteLabel"]) @aws_api_key @aws_iam
 }
 

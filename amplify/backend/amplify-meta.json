@@ -23,11 +23,11 @@
             }
           ],
           "defaultAuthentication": {
+            "authenticationType": "API_KEY",
             "apiKeyConfig": {
               "apiKeyExpirationDays": 30,
               "description": "api key description"
-            },
-            "authenticationType": "API_KEY"
+            }
           }
         },
         "GraphQLAPIIdOutput": "f3y4dfksczfqrkonshbvxizkge",
@@ -36,11 +36,12 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2023-04-04T12:09:43.319Z",
+      "lastPushTimeStamp": "2023-04-15T15:33:53.783Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-signsensei-staging-115038-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apiSignSensei"
-      }
+      },
+      "lastPushDirHash": "70SeEKHt6Zhd4qJNhe7e5zuAd4A="
     }
   },
   "auth": {
@@ -83,7 +84,7 @@
         "IdentityPoolName": "testAuthIdentityPool__staging",
         "UserPoolName": "SignSensei"
       },
-      "lastPushTimeStamp": "2023-04-04T12:09:43.340Z",
+      "lastPushTimeStamp": "2023-04-15T15:33:53.794Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-signsensei-staging-115038-deployment/amplify-cfn-templates/auth/SignSensei-cloudformation-template.json",
         "logicalId": "authSignSensei"
@@ -99,12 +100,11 @@
         "BucketName": "signsensei-storage-422827ee115038-staging",
         "Region": "ap-southeast-1"
       },
-      "lastPushTimeStamp": "2023-04-04T12:09:49.902Z",
+      "lastPushTimeStamp": "2023-04-15T15:33:55.848Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-signsensei-staging-115038-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
         "logicalId": "storages3signsenseistorage422827ee"
-      },
-      "lastPushDirHash": "XoeD+TXVgqW8LKpo4UqPLBo6Ygw="
+      }
     }
   }
 }

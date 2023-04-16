@@ -167,7 +167,7 @@
             "Ref": "UnauthRoleName"
           },
           "S3DeploymentBucket": "amplify-signsensei-staging-115038-deployment",
-          "S3DeploymentRootKey": "amplify-appsync-files/c8f4f23249b27836ef2e1b368fd0e48a89bf3578",
+          "S3DeploymentRootKey": "amplify-appsync-files/f32cb6c0de6a206192b112cece0d7b27581e4be6",
           "env": "staging"
         }
       }
