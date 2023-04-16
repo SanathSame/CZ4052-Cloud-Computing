@@ -55,6 +55,56 @@
       "service": "Cognito"
     }
   },
+  "function": {
+    "predictLabel": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "SignSensei"
+        },
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "SignSensei"
+        },
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "s3signsenseistorage422827ee"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_predictLabel_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "predictLabel"
+        }
+      ]
+    },
+    "AMPLIFY_function_predictLabel_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "predictLabel"
+        }
+      ]
+    }
+  },
   "storage": {
     "s3signsenseistorage422827ee": {
       "dependsOn": [],

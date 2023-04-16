@@ -36,7 +36,7 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2023-04-15T15:32:26.284Z",
+      "lastPushTimeStamp": "2023-04-16T07:52:27.840Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-signsensei-staging-115038-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apiSignSensei"
@@ -84,7 +84,7 @@
         "IdentityPoolName": "testAuthIdentityPool__staging",
         "UserPoolName": "SignSensei"
       },
-      "lastPushTimeStamp": "2023-04-15T15:32:26.229Z",
+      "lastPushTimeStamp": "2023-04-16T07:52:27.851Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-signsensei-staging-115038-deployment/amplify-cfn-templates/auth/SignSensei-cloudformation-template.json",
         "logicalId": "authSignSensei"
@@ -100,11 +100,65 @@
         "BucketName": "signsensei-storage-422827ee115038-staging",
         "Region": "ap-southeast-1"
       },
-      "lastPushTimeStamp": "2023-04-15T15:32:26.230Z",
+      "lastPushTimeStamp": "2023-04-16T07:52:27.860Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-signsensei-staging-115038-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
         "logicalId": "storages3signsenseistorage422827ee"
       }
+    }
+  },
+  "function": {
+    "predictLabel": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "SignSensei",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "SignSensei",
+          "attributes": [
+            "UserPoolId"
+          ]
+        },
+        {
+          "category": "storage",
+          "resourceName": "s3signsenseistorage422827ee",
+          "attributes": [
+            "BucketName"
+          ]
+        }
+      ],
+      "lastBuildTimeStamp": "2023-04-16T07:50:06.924Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2023-04-16T07:50:50.751Z",
+      "distZipFilename": "predictLabel-2f42346253505979516c-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-signsensei-staging-115038-deployment",
+        "s3Key": "amplify-builds/predictLabel-2f42346253505979516c-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-signsensei-staging-115038-deployment/amplify-cfn-templates/function/predictLabel-cloudformation-template.json",
+        "logicalId": "functionpredictLabel"
+      },
+      "lastPushTimeStamp": "2023-04-16T07:52:28.025Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::080062018042:role/signsenseiLambdaRole44dbf8d1-staging",
+        "Region": "ap-southeast-1",
+        "Arn": "arn:aws:lambda:ap-southeast-1:080062018042:function:predictLabel-staging",
+        "Name": "predictLabel-staging",
+        "LambdaExecutionRole": "signsenseiLambdaRole44dbf8d1-staging"
+      },
+      "lastPushDirHash": "IsWofF3EGhfKre2nKm4oakoiKZ8=",
+      "lastDevBuildTimeStamp": "2023-04-16T07:40:09.042Z"
     }
   }
 }

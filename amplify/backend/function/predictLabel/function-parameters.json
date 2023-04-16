@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "api": {
+      "SignSensei": [
+        "Query",
+        "Mutation"
+      ]
+    },
+    "auth": {
+      "SignSensei": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "s3signsenseistorage422827ee": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Label:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

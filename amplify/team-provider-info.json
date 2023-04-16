@@ -17,6 +17,15 @@
       },
       "storage": {
         "s3signsenseistorage422827ee": {}
+      },
+      "function": {
+        "predictLabel": {
+          "deploymentBucketName": "amplify-signsensei-staging-115038-deployment",
+          "s3Key": "amplify-builds/predictLabel-2f42346253505979516c-build.zip"
+        }
+      },
+      "api": {
+        "SignSensei": {}
       }
     }
   }

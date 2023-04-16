@@ -263,6 +263,47 @@
         }
       }
     },
+    "functionpredictLabel": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-signsensei-staging-115038-deployment/amplify-cfn-templates/function/predictLabel-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-signsensei-staging-115038-deployment",
+          "s3Key": "amplify-builds/predictLabel-2f42346253505979516c-build.zip",
+          "apiSignSenseiGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiSignSensei",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "apiSignSenseiGraphQLAPIEndpointOutput": {
+            "Fn::GetAtt": [
+              "apiSignSensei",
+              "Outputs.GraphQLAPIEndpointOutput"
+            ]
+          },
+          "apiSignSenseiGraphQLAPIKeyOutput": {
+            "Fn::GetAtt": [
+              "apiSignSensei",
+              "Outputs.GraphQLAPIKeyOutput"
+            ]
+          },
+          "authSignSenseiUserPoolId": {
+            "Fn::GetAtt": [
+              "authSignSensei",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "storages3signsenseistorage422827eeBucketName": {
+            "Fn::GetAtt": [
+              "storages3signsenseistorage422827ee",
+              "Outputs.BucketName"
+            ]
+          },
+          "env": "staging"
+        }
+      }
+    },
     "UpdateRolesWithIDPFunction": {
       "DependsOn": [
         "AuthRole",
