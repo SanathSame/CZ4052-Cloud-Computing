@@ -29,8 +29,8 @@ detector = vision.HandLandmarker.create_from_options(options)
 session = new_session("u2netp")
 
 # Load mediapipe Background Replacer
-# with open('models\deeplabv3.tflite', "rb") as f:
-with open('models\selfie_segm_128_128_3.tflite', "rb") as f:
+with open('models\deeplabv3.tflite', "rb") as f:
+# with open('models\selfie_segm_128_128_3.tflite', "rb") as f:
     base_options = python.BaseOptions(model_asset_buffer=f.read())
 options = vision.ImageSegmenterOptions(base_options=base_options,
                                         running_mode=vision.RunningMode.IMAGE,
@@ -47,7 +47,7 @@ def bgreplace(img, h, w):
     bg_image = np.zeros(image_data.shape, dtype=np.uint8)
     bg_image[:] = BG_COLOR
 
-    condition = np.stack((category_masks[0].numpy_view(),) * 3, axis=-1) > 0.
+    condition = np.stack((category_masks[0].numpy_view(),) * 3, axis=-1) > 0.99
     output_image = np.where(condition, image_data, bg_image)
     return output_image
 
@@ -62,12 +62,12 @@ def generate_frames(path):
             success, img = cap.read()
             image_cropped = img
 
-            # image_cropped = remove(image_cropped)
+            # image_cropped = bgremove4(image_cropped)
             # image_cropped = cv2.cvtColor(image_cropped, cv2.COLOR_RGBA2RGB)
 
             h, w, c = image_cropped.shape
             image_cropped = cv2.resize(image_cropped, (w,h))
-            print(image_cropped.shape)
+            # print(image_cropped.shape)
 
             image = mp.Image(image_format=mp.ImageFormat.SRGB, data=image_cropped)
             # image = bgreplace(image, h, w)
@@ -94,14 +94,14 @@ def generate_frames(path):
                 cv2.rectangle(annotated_image, (x_min-10, y_min-10), (x_max+10, y_max+10), (0, 255, 0), 2)
                     
                 try:
-                    image_save = image_cropped[y_min-10:y_max+10, x_min-10:x_max+10]
+                    image_save = image_cropped[y_min-25:y_max+25, x_min-25:x_max+25]
                     if not cv2.imwrite(f"archive\\predict\\frames\\{count}.jpg", image_save):
                         print(f"archive\\predict\\frames\\{count}.jpg")
                         print("Not saved")
                 except:
                     print("Nothing")
-            # cv2.imshow("Detected hands", annotated_image)
-            # cv2.waitKey(1)
+            cv2.imshow("Detected hands", annotated_image)
+            cv2.waitKey(1)
             count += 1
         except Exception:
             print(traceback.format_exc())
@@ -138,7 +138,7 @@ def load(filename):
 def test_model():
     test_dir = "archive/predict/frames"
     norm_layer = tf.keras.layers.experimental.preprocessing.Rescaling(1/255.)
-    model = tf.keras.models.load_model('models/simple_video_model.h5')
+    model = tf.keras.models.load_model('models/simple_model2_size28_epoch15.h5')
 
     # Make predictions on the images in the folder
     preds = []
@@ -148,6 +148,7 @@ def test_model():
         img = norm_layer(img)
         pred = model.predict(img)
         preds.append(np.argmax(pred))
+        print(np.argmax(pred))
 
     # Count the occurrences of each predicted class
     counter = Counter(preds)
@@ -161,7 +162,7 @@ def cleanup():
         
 if __name__ == "__main__":
 #uncomment the following if json has not been parsed
-    input = "archive/predict/1_gs.mp4"
+    input = "archive/predict/a5.mp4"
     generate_frames(input)
     clean_frame_dirs()
     test_model()
