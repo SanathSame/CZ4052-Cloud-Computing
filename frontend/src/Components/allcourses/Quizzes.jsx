@@ -4,6 +4,8 @@ import Header from "../common/heading/Header";
 import Footer from "../common/footer/Footer";
 import "./videos.css";
 import Back from "../common/back/Back";
+import CircularProgress from '@mui/joy/CircularProgress';
+
 
 function Quizzes() {
   const navigate = useNavigate();
@@ -24,6 +26,8 @@ function Quizzes() {
   letters.splice(letters.indexOf("Y"), 1);
   letters.splice(letters.indexOf("Z"), 1);
 
+  const letter = sessionStorage.getItem('letter');
+
   const QuizCard = ({ cardLetter }) => {
     return (
       <>
@@ -42,8 +46,12 @@ function Quizzes() {
                 {cardLetter}
               </h5>
               <div className="d-grid">
-                <button onClick={() => handleSubmit(cardLetter)}>Submit</button>
-              </div>
+                {letter === null ? <button onClick={() => handleSubmit(cardLetter)}>Submit</button> : letter === cardLetter ? <div className="cpi"><CircularProgress
+                  determinate={false}
+                  size="md"
+                  value={20}
+                  variant="plain"
+                /> </div> : <button onClick={() => handleSubmit(cardLetter)}>Submit</button>}              </div>
             </div>
           </div>
         </div>

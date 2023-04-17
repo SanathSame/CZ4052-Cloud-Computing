@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuthenticator, Button } from "@aws-amplify/ui-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 import Head from "./Head";
 import "./header.css";
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [click, setClick] = useState(false);
   const { signOut } = useAuthenticator((context) => [
     context.route,
@@ -16,6 +17,11 @@ const Header = () => {
     signOut();
     navigate("/login");
   };
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
   return (
     <>
       <Head />
@@ -23,20 +29,27 @@ const Header = () => {
         <nav className="flexSB">
           <div style={{ flexGrow: 1 }}>
             <ul className={click ? "mobile-nav" : "flexSB"} onClick={() => setClick(false)}>
-              {/* <li><Link to='/' style={{ textDecoration: 'none' }}>Home</Link></li> */}
               <li>
-                <Link to="/learn" style={{ textDecoration: 'none' }}>Learn</Link>
+                <Link to="/learn" className={isActive("/learn") ? "active" : ""} style={{ textDecoration: 'none' }}>
+                  Learn
+                </Link>
               </li>
               <li>
-                <Link to="/quizzeshome" style={{ textDecoration: 'none' }}>Quizzes</Link>
+                <Link to="/quizzeshome" className={isActive("/quizzeshome") ? "active" : ""} style={{ textDecoration: 'none' }}>
+                  Quizzes
+                </Link>
               </li>
               <li>
-                <Link to="/contribute" style={{ textDecoration: 'none' }}>Contribute</Link>
+                <Link to="/contribute" className={isActive("/contribute") ? "active" : ""} style={{ textDecoration: 'none' }}>
+                  Contribute
+                </Link>
               </li>
               <li>
-                <Link to="/profile" style={{ textDecoration: 'none' }}>Profile</Link>
+                <Link to="/profile" className={isActive("/profile") ? "active" : ""} style={{ textDecoration: 'none' }}>
+                  Profile
+                </Link>
               </li>
-              <li onClick={logOut}>
+              <li onClick={logOut} >
                 <Link style={{ textDecoration: 'none' }}>Logout</Link>
               </li>
             </ul>

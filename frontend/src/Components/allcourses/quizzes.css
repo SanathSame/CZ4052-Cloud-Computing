@@ -2,6 +2,12 @@
     padding: 50px 0;
 }
 
+.cpi {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
 .quizzesCard .items {
     background-color: #fff;
     padding: 30px;

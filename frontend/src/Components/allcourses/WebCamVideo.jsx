@@ -12,6 +12,7 @@ export default function WebcamVideo() {
   const mediaRecorderRef = useRef(null);
   const [capturing, setCapturing] = useState(false);
   const [recordedChunks, setRecordedChunks] = useState([]);
+  const [isUploaded, setisUploaded] = useState(false);
 
   const handleCloseClick = () => {
     navigate(-1);
@@ -60,10 +61,20 @@ export default function WebcamVideo() {
         { type: "video/mp4" }
       );
       console.log(upload_file.type);
-      Storage.put(upload_file.name, upload_file, {
-        level: "protected",
-        contentType: upload_file.type,
-      });
+      try {
+        await Storage.put(upload_file.name, upload_file, {
+          level: "protected",
+          contentType: upload_file.type,
+        });
+        setisUploaded(true);
+        console.log('Letter uploaded is', letter)
+        sessionStorage.setItem('letter', letter);
+        alert('Successful video upload');
+      } catch (error) {
+        console.error('Upload error:', error);
+        alert('Error uploading video, try recording again');
+        setisUploaded(false);
+      }
       setRecordedChunks([]);
     }
   }, [recordedChunks, letter]);
@@ -90,7 +101,7 @@ export default function WebcamVideo() {
     facingMode: "user",
   };
 
-  return (
+  return (!isUploaded ?
     <div className="video-popup">
       <div className="video-popup-overlay" onClick={handleCloseClick} />
       <div className="video-popup-content">
@@ -102,7 +113,11 @@ export default function WebcamVideo() {
           ref={webcamRef}
           videoConstraints={videoConstraints}
         />
-        <div>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
           {capturing ? (
             <button onClick={handleStopCaptureClick}>Stop Capture</button>
           ) : (
@@ -117,5 +132,7 @@ export default function WebcamVideo() {
         </div>
       </div>
     </div>
-  );
+    : (
+      navigate('/quizzes')
+    ));
 }
