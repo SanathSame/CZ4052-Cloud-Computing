@@ -7,7 +7,7 @@ def handler(event, context):
   print('received event:')
   print(event)
   s3 = boto3.client('s3')
-  bucket = os.environ.get	('STORAGE_S3SIGNSENSEISTORAGE422827EE_BUCKETNAME')
+  bucket = os.environ.get('STORAGE_S3SIGNSENSEISTORAGE422827EE_BUCKETNAME')
   print(bucket)
   result = s3.list_objects(Bucket = bucket, Prefix='protected/ap-southeast-1:53fef940-a158-4bca-8d0f-398f685a401f/')
   for o in result.get('Contents'):

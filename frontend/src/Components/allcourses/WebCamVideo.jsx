@@ -51,20 +51,21 @@ export default function WebcamVideo() {
       });
       const url = URL.createObjectURL(blob);
       const mediablob = await fetch(url).then((response) => response.blob());
-      console.log(letter + "_" + Date.now().toString() + ".mp4");
+      const filename = letter + "_" + Date.now().toString() + ".mp4";
+      console.log(filename);
       const { id } = await Auth.currentUserInfo();
       console.log(id);
-      const upload_file = new File(
-        [mediablob],
-        letter + "_" + Date.now().toString() + ".mp4",
-        { type: "video/mp4" }
-      );
-      console.log(upload_file.type);
-      Storage.put(upload_file.name, upload_file, {
-        level: "protected",
-        contentType: upload_file.type,
+      const upload_file = new File([mediablob], filename, {
+        type: "video/mp4",
       });
-      setRecordedChunks([]);
+      const S3_key = "protected/" + id + "/" + filename;
+      console.log(S3_key);
+      console.log(upload_file.type);
+      //   Storage.put(upload_file.name, upload_file, {
+      //     level: "protected",
+      //     contentType: upload_file.type,
+      //   });
+      //   setRecordedChunks([]);
     }
   }, [recordedChunks, letter]);
 

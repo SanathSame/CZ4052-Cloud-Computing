@@ -1,0 +1,8 @@
+boto3
+Flask
+python-dotenv
+opencv-python
+pandas
+numpy
+keras
+tensorflow

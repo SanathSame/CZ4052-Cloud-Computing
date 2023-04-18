@@ -12,12 +12,12 @@ from predict import probability2label
 N_FRAMES = 40
 N_CLASSES = 20
 
-def predict(path):
+def predict(url):
     sModelFile = "C:\\Users\\tejas\\Desktop\\NTU Stuff\\Y4S1\\Cloud Computing\\CZ4052-Cloud-Computing\\models\\20180627-0729-chalearn020-oflow-i3d-entire-best.h5"
     h, w = 224, 224
     keI3D = I3D_load(sModelFile, N_FRAMES, (h, w, 2), N_CLASSES)
 
-    cap = cv2.VideoCapture(path)
+    cap = cv2.VideoCapture(url)
 
     fElapsed, arFrames = video_capture(cap, nTimeDuration = 5)
     print("\nCaptured video: %.1f sec, %s, %.1f fps" % \

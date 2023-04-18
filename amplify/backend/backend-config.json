@@ -87,24 +87,6 @@
       "service": "Lambda"
     }
   },
-  "parameters": {
-    "AMPLIFY_function_predictLabel_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "predictLabel"
-        }
-      ]
-    },
-    "AMPLIFY_function_predictLabel_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "predictLabel"
-        }
-      ]
-    }
-  },
   "storage": {
     "s3signsenseistorage422827ee": {
       "dependsOn": [],
