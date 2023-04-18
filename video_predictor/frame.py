@@ -6,6 +6,7 @@ Plus some frame=image manipulation utilities.
 """
 
 import os
+import re
 import glob
 import warnings
 import random
@@ -230,7 +231,8 @@ def videosDir2framesDir(sVideoDir:str, sFrameDir:str, nFramesNorm:int = None,
     for sVideoPath in dfVideos.sVideoPath:
 
         # assemble target diretory (assumed directories see above)
-        li_sVideoPath = sVideoPath.split("/")
+        # li_sVideoPath = sVideoPath.split("/")
+        li_sVideoPath = re.split(r'[/\\]', sVideoPath)
         if len(li_sVideoPath) < 4: raise ValueError("Video path should have min 4 components: {}".format(str(li_sVideoPath)))
         sVideoName = li_sVideoPath[-1].split(".")[0]
         sTargetDir = sFrameDir + "/" + li_sVideoPath[-3] + "/" + li_sVideoPath[-2] + "/" + sVideoName
@@ -251,10 +253,15 @@ def videosDir2framesDir(sVideoDir:str, sFrameDir:str, nFramesNorm:int = None,
         # slice videos into frames with OpenCV
         arFrames = video2frames(sVideoPath, nResizeMinDim)
 
-        # length and fps
-        fVideoSec = video_length(sVideoPath)
-        nFrames = len(arFrames)
-        fFPS = nFrames / fVideoSec   
+        try:
+            # length and fps
+            fVideoSec = video_length(sVideoPath)
+            nFrames = len(arFrames)
+            fFPS = nFrames / fVideoSec
+        except:
+            fVideoSec = -1
+            nFrames = -1
+            fFPS = -1
 
         # downsample
         if nFramesNorm != None: 
@@ -271,40 +278,3 @@ def videosDir2framesDir(sVideoDir:str, sFrameDir:str, nFramesNorm:int = None,
         nCounter += 1      
 
     return
-
-
-def unittest(sVideoDir, nSamples = 100):
-    print("\nAnalyze video durations and fps from %s ..." % (sVideoDir))
-    print(os.getcwd())
-
-    liVideos = glob.glob(sVideoDir + "/*/*.mp4") + glob.glob(sVideoDir + "/*/*.avi")
-    
-    if len(liVideos) == 0: raise ValueError("No videos detected")
-
-    fVideoSec_sum, nFrames_sum = 0, 0
-    for i in range(nSamples):
-        sVideoPath = random.choice(liVideos)
-        #print("Video %s" % sVideoPath)
-
-        # read video
-        arFrames = video2frames(sVideoPath, 256)
-        nFrames = len(arFrames)
-
-        # determine length of video in sec and deduce frame rate
-        fVideoSec = video_length(sVideoPath)
-        fFPS = nFrames / fVideoSec
-
-        fVideoSec_sum += fVideoSec
-        nFrames_sum += nFrames
-
-        print("%2d: Shape %s, duration %.1f sec, fps %.1f" % (i, str(arFrames.shape), fVideoSec, fFPS))
-
-    nCount = i+1
-    print("%d samples: Average video duration %.1f sec, fps %.1f" % (nSamples, fVideoSec_sum / nCount, nFrames_sum / fVideoSec_sum))
-
-    return
-
-if __name__ == '__main__':
-
-    unittest("data-set/01-ledasila/021/train", 100)
-    unittest("data-set/04-chalearn/010/train", 100)

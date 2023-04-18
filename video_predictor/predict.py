@@ -1,5 +1,5 @@
 import numpy as np
-from classes import ORIG_20_CLASSES
+from constants import ORIG_20_CLASSES, NEW_28_CLASSES
 
 def probability2label(arProbas, nTop:int = 3):
     """ 
