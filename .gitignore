@@ -4,6 +4,8 @@
 *.zip
 /Sign-Language-Interpreter-using-Deep-Learning-master
 /models
+log/
+*.h5
 archive/
 __pycache__/
 
