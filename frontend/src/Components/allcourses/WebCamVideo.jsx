@@ -2,16 +2,20 @@ import React, { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Auth, Storage } from "aws-amplify";
+import CircularProgress from "@mui/joy/CircularProgress";
 
 export default function WebcamVideo() {
   const { state } = useLocation();
-  const { letter } = state;
+  const { letter, EC2_URL } = state;
   const navigate = useNavigate();
   console.log(letter);
   const webcamRef = useRef(null);
   const mediaRecorderRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [prediction, setPrediction] = useState("");
   const [capturing, setCapturing] = useState(false);
   const [recordedChunks, setRecordedChunks] = useState([]);
+  const [isUploaded, setisUploaded] = useState(false);
 
   const handleCloseClick = () => {
     navigate(-1);
@@ -61,13 +65,37 @@ export default function WebcamVideo() {
       const S3_key = "protected/" + id + "/" + filename;
       console.log(S3_key);
       console.log(upload_file.type);
-      //   Storage.put(upload_file.name, upload_file, {
-      //     level: "protected",
-      //     contentType: upload_file.type,
-      //   });
-      //   setRecordedChunks([]);
+      try {
+        await Storage.put(upload_file.name, upload_file, {
+          level: "protected",
+          contentType: upload_file.type,
+        });
+        setisUploaded(true);
+        console.log("Letter uploaded is", letter);
+        sessionStorage.setItem("letter", letter);
+        alert("Successful video upload");
+      } catch (error) {
+        console.error("Upload error:", error);
+        alert("Error uploading video, try recording again");
+        setisUploaded(false);
+      }
+      setRecordedChunks([]);
+      try {
+        setIsLoading(true);
+        const response = await fetch(EC2_URL + "/predict?S3_key=" + S3_key);
+        const result = await response.json();
+        console.log(result["prediction_class"]);
+        setIsLoading(false);
+        setPrediction(result["prediction_class"]);
+        sessionStorage.setItem("prediction", result["prediction_class"]);
+      } catch (error) {
+        console.error("Prediction error:", error);
+        alert("Error retrieving prediction, try recording again");
+        setIsLoading(false);
+        setPrediction("");
+      }
     }
-  }, [recordedChunks, letter]);
+  }, [recordedChunks, letter, EC2_URL]);
 
   const handleDownload = useCallback(async () => {
     if (recordedChunks.length) {
@@ -91,7 +119,7 @@ export default function WebcamVideo() {
     facingMode: "user",
   };
 
-  return (
+  return !isUploaded ? (
     <div className="video-popup">
       <div className="video-popup-overlay" onClick={handleCloseClick} />
       <div className="video-popup-content">
@@ -103,11 +131,29 @@ export default function WebcamVideo() {
           ref={webcamRef}
           videoConstraints={videoConstraints}
         />
-        <div>
-          {capturing ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {isLoading ? (
+            <div className="cpi">
+              <CircularProgress
+                determinate={false}
+                size="md"
+                value={20}
+                variant="plain"
+              />
+              {"Retrieving Predictions, Please wait!"}
+            </div>
+          ) : capturing ? (
             <button onClick={handleStopCaptureClick}>Stop Capture</button>
-          ) : (
+          ) : prediction === "" ? (
             <button onClick={handleStartCaptureClick}>Start Capture</button>
+          ) : (
+            <h1>Prediction is {prediction}</h1>
           )}
           {recordedChunks.length > 0 && (
             <div>
@@ -118,5 +164,7 @@ export default function WebcamVideo() {
         </div>
       </div>
     </div>
+  ) : (
+    navigate("/quizzes")
   );
 }

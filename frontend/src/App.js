@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Components/home/Home";
@@ -9,21 +9,20 @@ import Contribute from "./Components/contact/Contribute";
 import Login from "./Components/Login/Login";
 import Lessons from "./Components/allcourses/Lessons";
 import WebcamVideo from "./Components/allcourses/WebCamVideo";
-
-import env from "react-dotenv";
-
-import { Amplify, Storage } from "aws-amplify";
-
+import { Amplify } from "aws-amplify";
+import QuizzesHome from "./Components/allcourses/QuizzesHome";
+import Quizzes from "./Components/allcourses/Quizzes";
 import "@aws-amplify/ui-react/styles.css";
 import "./ui-components/index";
 
 import awsExports from "./aws-exports";
 import { Authenticator } from "@aws-amplify/ui-react";
-import Quizzes from "./Components/allcourses/Quizzes";
 Amplify.configure(awsExports);
+
 
 const AppRoutes = () => {
   console.log(process.env.REACT_APP_CDN_URL);
+  console.log(process.env.REACT_APP_EC2_URL);
   return (
     <Router>
       <Routes>
@@ -46,10 +45,18 @@ const AppRoutes = () => {
           }
         />
         <Route
+          path="/quizzeshome"
+          element={
+            <RequireAuth>
+              <QuizzesHome />
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/quizzes"
           element={
             <RequireAuth>
-              <Quizzes />
+              <Quizzes EC2_URL={process.env.REACT_APP_EC2_URL}/>
             </RequireAuth>
           }
         />

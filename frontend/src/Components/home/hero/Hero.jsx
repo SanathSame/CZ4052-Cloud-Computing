@@ -2,14 +2,11 @@ import React from "react";
 import Title from "../../common/title/Title";
 import "./hero.css";
 import { useNavigate } from "react-router-dom";
-
 function Hero() {
   const navigate = useNavigate();
 
   const handleLogin = () =>
     navigate("/login", { state: { initialState: "signIn" } });
-  const handleSignUp = () =>
-    navigate("/login", { state: { initialState: "signUp" } });
 
   return (
     <>
@@ -28,19 +25,14 @@ function Hero() {
               resources, including a dictionary and phrasebook. Join our
               community of passionate learners today!
             </p>
-            <div className="button">
-              <button onClick={handleLogin}>
-                LOGIN<i className="fa fa-long-arrow-alt-right"></i>
-              </button>
-              <button onClick={handleSignUp}>
-                SIGN UP<i className="fa fa-long-arrow-alt-right"></i>
+            <div className="button" onClick={handleLogin}>
+              <button>
+                GET STARTED <i className="fa fa-long-arrow-alt-right"></i>
               </button>
             </div>
           </div>
         </div>
       </section>
-
-      <div className="marigin"></div>
     </>
   );
 }

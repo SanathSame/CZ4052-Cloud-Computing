@@ -1,73 +1,77 @@
-.head{
+.head {
     padding: 20px 0;
     color: #fff;
 }
 
-.logo h1{
+.logo h1 {
     font-size: 35px;
     font-weight: 900;
 }
 
-.head .icon{
+.head .icon {
     margin-left: 10px;
 }
 
+.active {
+    color: #1eb2a6;
+}
+
 /* < ---------------------HEADER--------------------> */
-header{
+header {
     background-color: rgba(255, 255, 255, 0.2);
     margin: 0 30px;
     position: relative;
 }
 
-header ul{
+header ul {
     padding: 30px 20px;
 }
 
-header li{
+header li {
     margin-right: 40px;
 }
 
-header ul li a{
+header ul li a {
     color: #fff;
     font-weight: 500;
     transition: 0.5s;
 }
 
-header ul li a:hover{
+header ul li a:hover {
     color: #1eb2a6;
 }
 
-.start{
+.start {
     background-color: #1eb2a6;
     padding: 30px 70px;
     color: #fff;
     clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
 }
 
-.toggle{
+.toggle {
     display: none;
 }
 
 @media screen and (max-width: 768px) {
-    .start{
+    .start {
         clip-path: none;
     }
 
-    header{
+    header {
         margin: 0;
         background-color: #1eb2a6;
         position: relative;
     }
 
-    header ul.flexSB{
+    header ul.flexSB {
         display: none;
     }
 
-    header ul li{
+    header ul li {
         margin-bottom: 20px;
     }
 
-    .toggle{
+    .toggle {
         display: block;
         background: none;
         color: #fff;
@@ -77,7 +81,7 @@ header ul li a:hover{
         top: -20px;
     }
 
-    .mobile-nav{
+    .mobile-nav {
         position: absolute;
         top: 7vh;
         left: 0;

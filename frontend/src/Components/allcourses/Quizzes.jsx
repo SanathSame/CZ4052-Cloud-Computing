@@ -4,11 +4,14 @@ import Header from "../common/heading/Header";
 import Footer from "../common/footer/Footer";
 import "./videos.css";
 import Back from "../common/back/Back";
+import CircularProgress from "@mui/joy/CircularProgress";
 
-function Quizzes() {
+function Quizzes({ EC2_URL }) {
   const navigate = useNavigate();
   const handleSubmit = (cardLetter) => {
-    navigate("/record-video", { state: { letter: cardLetter } });
+    navigate("/record-video", {
+      state: { letter: cardLetter, EC2_URL: EC2_URL },
+    });
   };
 
   const letters = [
@@ -23,6 +26,9 @@ function Quizzes() {
   letters.splice(letters.indexOf("X"), 1);
   letters.splice(letters.indexOf("Y"), 1);
   letters.splice(letters.indexOf("Z"), 1);
+
+  const letter = sessionStorage.getItem("letter");
+  const prediction = sessionStorage.getItem("prediction");
 
   const QuizCard = ({ cardLetter }) => {
     return (
@@ -42,7 +48,26 @@ function Quizzes() {
                 {cardLetter}
               </h5>
               <div className="d-grid">
-                <button onClick={() => handleSubmit(cardLetter)}>Submit</button>
+                {letter === null ? (
+                  <button onClick={() => handleSubmit(cardLetter)}>
+                    Submit
+                  </button>
+                ) : letter === cardLetter && !prediction ? (
+                  <div className="cpi">
+                    <CircularProgress
+                      determinate={false}
+                      size="md"
+                      value={20}
+                      variant="plain"
+                    />{" "}
+                  </div>
+                ) : !prediction ? (
+                  <button onClick={() => handleSubmit(cardLetter)}>
+                    Submit
+                  </button>
+                ) : (
+                  <h1>Prediction is {prediction}</h1>
+                )}{" "}
               </div>
             </div>
           </div>
