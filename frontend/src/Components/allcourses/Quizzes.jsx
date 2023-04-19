@@ -5,6 +5,7 @@ import Footer from "../common/footer/Footer";
 import "./videos.css";
 import Back from "../common/back/Back";
 import CircularProgress from "@mui/joy/CircularProgress";
+import { words } from "../../dummydata";
 
 function Quizzes({ EC2_URL }) {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ function Quizzes({ EC2_URL }) {
       state: { letter: cardLetter, EC2_URL: EC2_URL },
     });
   };
+  const content = sessionStorage.getItem('Quiz Topic');
 
   const letters = [
     ...Array("Z".charCodeAt(0) - "A".charCodeAt(0) + 1).keys(),
@@ -30,7 +32,7 @@ function Quizzes({ EC2_URL }) {
   const letter = sessionStorage.getItem("letter");
   const prediction = sessionStorage.getItem("prediction");
 
-  const QuizCard = ({ cardLetter }) => {
+  const LetterQuizCard = ({ cardLetter }) => {
     return (
       <>
         <div className="col" class={{ border: "1px black solid" }}>
@@ -76,22 +78,83 @@ function Quizzes({ EC2_URL }) {
     );
   };
 
-  return (
+  const WordQuizCard = ({ cardLetter }) => {
+    return (
+      <>
+        <div className="col" class={{ border: "1px black solid" }}>
+          <div className="card shadow-sm">
+            <div className="bg-dark cover">
+              <img
+                className="card-img-top"
+                height="200"
+                alt=""
+                src={`${process.env.PUBLIC_URL}/images/Course1.JPG`} // replace with thumbnail URL
+              />
+            </div>
+            <div className="card-body">
+              <h5 className="card-title text-center text-truncate">
+                {cardLetter}
+              </h5>
+              <div className="d-grid">
+                {letter === null ? (
+                  <button onClick={() => handleSubmit(cardLetter)}>
+                    Submit
+                  </button>
+                ) : letter === cardLetter && !prediction ? (
+                  <div className="cpi">
+                    <CircularProgress
+                      determinate={false}
+                      size="md"
+                      value={20}
+                      variant="plain"
+                    />{" "}
+                  </div>
+                ) : !prediction ? (
+                  <button onClick={() => handleSubmit(cardLetter)}>
+                    Submit
+                  </button>
+                ) : (
+                  <h1>Prediction is {prediction}</h1>
+                )}{" "}
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  return content === 'letters' ?
     <>
       <Header />
-      <Back title="Quizzes"></Back>
+      <Back title="Letter Quiz"></Back>
       <div className="quizzes-page">
         <h1>ASL Learning Quizzes</h1>
         <div class="d-flex justify-content-around flex-wrap">
           {letters.map((letter) => {
-            return <QuizCard cardLetter={letter} />;
+            return <LetterQuizCard cardLetter={letter} />;
           })}
 
         </div>
       </div>
       <Footer />
     </>
-  );
+    :
+    <>
+      <Header />
+      <Back title="Word Quizz"></Back>
+      <div className="quizzes-page">
+        <h1>ASL Learning Quizzes</h1>
+        <div class="d-flex justify-content-around flex-wrap">
+          {words.map((letter) => {
+            return <WordQuizCard cardLetter={letter} />;
+          })}
+
+        </div>
+      </div>
+      <Footer />
+    </>
+
 }
 
 export default Quizzes;
