@@ -24,6 +24,14 @@
   background-color: white;
   max-width: 80%;
   max-height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-popup-content button {
+  margin-top: 10px;
 }
 
 .video-popup-content video {
@@ -33,10 +41,10 @@
 }
 
 .video-popup-content Webcam {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
 
 .close-button {
   position: absolute;

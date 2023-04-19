@@ -86,7 +86,7 @@ function Quizzes({ EC2_URL }) {
           {letters.map((letter) => {
             return <QuizCard cardLetter={letter} />;
           })}
-          ;
+
         </div>
       </div>
       <Footer />

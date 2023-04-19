@@ -1,6 +1,6 @@
 import React from 'react'
 import Back from '../common/back/Back'
-import TeamCard from './ProfileCard'
+import ProfileCard from './ProfileCard'
 import "./team.css"
 import Header from '../common/heading/Header'
 import Footer from '../common/footer/Footer'
@@ -15,7 +15,7 @@ const Profile = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          <TeamCard />
+          <ProfileCard />
         </div>
       </section>
       <Footer />

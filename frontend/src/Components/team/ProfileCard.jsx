@@ -17,8 +17,10 @@ function ProfileCard() {
   }, []);
 
   async function getUserInfo() {
-    const { username } = await Auth.currentUserInfo();
-    setUserName(username);
+    const { attributes } = await Auth.currentUserInfo();
+    let { email } = attributes
+    console.log("Details are", email);
+    setUserName(email.split('@')[0]);
   }
 
   return (

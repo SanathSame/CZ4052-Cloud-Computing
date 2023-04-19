@@ -1,10 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { coursesCard } from "../../dummydata";
 import "./courses.css";
 import { Button } from "@aws-amplify/ui-react";
+import { useNavigate } from "react-router-dom";
+function CoursesCard() {
+  const navigate = useNavigate();
 
-const CoursesCard = () => {
+  function handleLessons(courseName) {
+    let course = '';
+    if (courseName.includes('Letters')) {
+      course = 'letters';
+    } else if (courseName.includes('Words')) {
+      course = 'words';
+    }
+    sessionStorage.setItem('Lesson', course);
+    navigate('/lessons');
+  }
   return (
     <>
       <section className="coursesCard">
@@ -24,7 +35,7 @@ const CoursesCard = () => {
                 </div>
                 <div className="price">
                 </div>
-                <Link to="/lessons"><Button>LEARN</Button></Link>
+                <Button onClick={() => handleLessons(val.coursesName)}>LEARN</Button>
               </div>
             );
           })}
@@ -32,6 +43,6 @@ const CoursesCard = () => {
       </section>
     </>
   );
-};
+}
 
 export default CoursesCard;

@@ -18,6 +18,9 @@ export const coursesCard = [
     ],
   },
 ]
+export const words = [
+  'Thunderstorm', 'Earthquake', 'Moon', 'Volcano', 'River', 'Bird', 'Butterfly', 'Cat', 'Dog', 'Space', 'Harbour', 'LiftOff', 'SpeedItUp', 'StartTheEngine', 'StopTheEngine'
+]
 
 export const quizzesCard = [
   {

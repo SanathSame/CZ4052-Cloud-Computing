@@ -5,11 +5,14 @@ import "./videos.css";
 import Back from "../common/back/Back";
 import { Storage } from "aws-amplify";
 import { Button } from "@aws-amplify/ui-react";
+import { useNavigate } from "react-router-dom";
+import { words } from "../../dummydata";
 
 function Lessons({ CDN_URL }) {
     const [showVideo, setShowVideo] = useState(false);
     const [letter, setLetter] = useState("");
-
+    const navigate = useNavigate();
+    const wordList = words;
     const handleWatchClick = (letter) => {
         setLetter(letter);
         setShowVideo(true);
@@ -18,12 +21,24 @@ function Lessons({ CDN_URL }) {
         // setLetter("");
         setShowVideo(false);
     };
+    const [isVideoWatched, setIsVideoWatched] = useState(false);
 
+    function handleWatchComplete() {
+        setIsVideoWatched(true);
+    }
+
+    function handleAttemptQuiz(letter) {
+        // handle quiz attempt
+        console.log('Letter is', letter)
+        navigate('/quizzes#:~:text=Submit-,' + { letter } + ',-Submit')
+    }
+
+
+    const content = sessionStorage.getItem('Lesson');
     const [data, setData] = useState([]);
 
     useEffect(() => {
         // fetch data
-
         const dataFetch = async () => {
             const { results } = await Storage.list("subdataset/");
             // set state when the data received
@@ -48,7 +63,7 @@ function Lessons({ CDN_URL }) {
     letters.splice(letters.indexOf("Z"), 1);
 
     const LessonCard = ({ cardLetter, videoUrl }) => {
-        // console.log(data);
+        console.log('Letters are', cardLetter);
         const letterURLs = data.filter((x) =>
             x["key"].includes("/" + cardLetter.toLowerCase() + "/")
         );
@@ -58,7 +73,7 @@ function Lessons({ CDN_URL }) {
             letterURLs[Math.floor(Math.random() * letterURLs.length)]["key"];
         return (
             <>
-                <div className="col" class={{ border: "1px black solid" }}>
+                <div className="col" class={{ border: "2px black solid" }}>
                     <div className="card shadow-sm">
                         <div className="bg-dark cover">
                             <img
@@ -80,10 +95,13 @@ function Lessons({ CDN_URL }) {
                         </div>
                     </div>
                     {showVideo && cardLetter === letter && (
-                        <div className="video-popup">
-                            <div className="video-popup-overlay" onClick={handleCloseClick} />
+                        <div className="video-popup" onClick={() => handleCloseClick()}>
+                            <div className="video-popup-overlay" />
                             <div className="video-popup-content">
-                                <video src={URL} controls />
+                                <video src={URL} controls onEnded={handleWatchComplete} />
+                                {isVideoWatched && (
+                                    <button onClick={() => handleAttemptQuiz(cardLetter)}>Attempt Quiz</button>
+                                )}
                             </div>
                         </div>
                     )}
@@ -91,25 +109,75 @@ function Lessons({ CDN_URL }) {
             </>
         );
     };
-
+    const WordCard = (props) => {
+        console.log('word is', props.cardWord);
+        return (
+            <>
+                <div className="col" class={{ border: "1px black solid" }}>
+                    <div className="card shadow-sm">
+                        <div className="bg-dark cover">
+                            <img
+                                className="card-img-top"
+                                height="200"
+                                alt=""
+                                src={`${process.env.PUBLIC_URL}/images/Course1.JPG`} // replace with thumbnail URL
+                            />
+                        </div>
+                        <div className="card-body">
+                            <h5 className="card-title text-center text-truncate">
+                                {props.cardWord}
+                            </h5>
+                            <div className="d-grid">
+                                <Button onClick={() => handleWatchClick(props.cardWord)}>
+                                    Watch
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                    {showVideo && props.cardWord === letter && (
+                        <div className="video-popup">
+                            <div className="video-popup-overlay" />
+                            <div className="video-popup-content">
+                                <video src={URL} controls onEnded={handleWatchComplete} />
+                                {isVideoWatched && (
+                                    <div>
+                                        <Button onClick={() => handleAttemptQuiz(props.cardWord)}>Attempt Quiz</Button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </>
+        );
+    };
     console.log(data);
 
     return (
         <>
-            <Header />
-            <Back title="Lessons"></Back>
-            <div className="lessons-page">
-                <h1>ASL Learning Lessons</h1>
-                <div class="d-flex justify-content-around flex-wrap">
-                    {data.length &&
-                        letters.map((letter) => {
-                            // console.log(CDN_URL);
-                            return <LessonCard cardLetter={letter} videoUrl={CDN_URL} />;
-                        })}
-                    ;
-                </div>
-            </div>
-            <Footer />
+            {content === 'letters' ? (
+                <>
+                    <Header />
+                    <Back title="Learning English Letters" />
+                    <div className="lessons-page">
+                        <div className="d-flex justify-content-around flex-wrap">
+                            {data.length && letters.map((letter) => <div className="my-3"><LessonCard cardLetter={letter} videoUrl={CDN_URL} /> </div>)}
+                        </div>
+                    </div>
+                    <Footer />
+                </>
+            ) : (
+                <>
+                    <Header />
+                    <Back title="Learning English Words" />
+                    <div className="lessons-page">
+                        <div className="d-flex justify-content-around flex-wrap">
+                            {data.length && wordList.map((word) => <div className="my-3"><WordCard cardWord={word} videoUrl={CDN_URL} /> </div>)}
+                        </div>
+                    </div>
+                    <Footer />
+                </>
+            )}
         </>
     );
 }

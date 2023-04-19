@@ -71,13 +71,12 @@ export default function WebcamVideo() {
           contentType: upload_file.type,
         });
         setisUploaded(true);
-        console.log("Letter uploaded is", letter);
-        sessionStorage.setItem("letter", letter);
+        console.log("Letter attempted is", letter);
         alert("Successful video upload");
       } catch (error) {
         console.error("Upload error:", error);
-        alert("Error uploading video, try recording again");
         setisUploaded(false);
+        alert("Error uploading video, try recording again");
       }
       setRecordedChunks([]);
       try {
@@ -87,6 +86,7 @@ export default function WebcamVideo() {
         console.log(result["prediction_class"]);
         setIsLoading(false);
         setPrediction(result["prediction_class"]);
+        sessionStorage.setItem("letter", letter);
         sessionStorage.setItem("prediction", result["prediction_class"]);
       } catch (error) {
         console.error("Prediction error:", error);
