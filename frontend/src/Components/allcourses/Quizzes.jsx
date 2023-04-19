@@ -127,7 +127,7 @@ function Quizzes({ EC2_URL }) {
   return content === 'letters' ?
     <>
       <Header />
-      <Back title="Letter Quiz"></Back>
+      <Back title="Letters Quiz"></Back>
       <div className="quizzes-page">
         <h1>ASL Learning Quizzes</h1>
         <div class="d-flex justify-content-around flex-wrap">
@@ -142,7 +142,7 @@ function Quizzes({ EC2_URL }) {
     :
     <>
       <Header />
-      <Back title="Word Quizz"></Back>
+      <Back title="Word Quiz"></Back>
       <div className="quizzes-page">
         <h1>ASL Learning Quizzes</h1>
         <div class="d-flex justify-content-around flex-wrap">
