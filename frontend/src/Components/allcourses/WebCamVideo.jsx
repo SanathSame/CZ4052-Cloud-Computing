@@ -81,18 +81,21 @@ export default function WebcamVideo() {
       setRecordedChunks([]);
       try {
         setIsLoading(true);
+        sessionStorage.setItem("letter", letter);
+        sessionStorage.setItem("prediction", "");
         const response = await fetch(EC2_URL + "/predict?S3_key=" + S3_key);
         const result = await response.json();
         console.log(result["prediction_class"]);
         setIsLoading(false);
         setPrediction(result["prediction_class"]);
-        sessionStorage.setItem("letter", letter);
         sessionStorage.setItem("prediction", result["prediction_class"]);
       } catch (error) {
         console.error("Prediction error:", error);
         alert("Error retrieving prediction, try recording again");
         setIsLoading(false);
         setPrediction("");
+        sessionStorage.setItem("letter", "");
+        sessionStorage.setItem("prediction", "");
       }
     }
   }, [recordedChunks, letter, EC2_URL]);

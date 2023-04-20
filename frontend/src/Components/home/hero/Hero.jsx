@@ -1,12 +1,10 @@
 import React from "react";
 import Title from "../../common/title/Title";
 import "./hero.css";
-import { useNavigate } from "react-router-dom";
-function Hero() {
-  const navigate = useNavigate();
+import { Link } from "react-router-dom";
 
-  const handleLogin = () =>
-    navigate("/login", { state: { initialState: "signIn" } });
+
+function Hero() {
 
   return (
     <>
@@ -25,11 +23,11 @@ function Hero() {
               resources, including a dictionary and phrasebook. Join our
               community of passionate learners today!
             </p>
-            <div className="button" onClick={handleLogin}>
+            <Link to="/login">
               <button>
                 GET STARTED <i className="fa fa-long-arrow-alt-right"></i>
               </button>
-            </div>
+            </Link>
           </div>
         </div>
       </section>

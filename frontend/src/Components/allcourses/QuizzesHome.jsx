@@ -7,18 +7,20 @@ import { quizzesCard } from "../../dummydata";
 import { Button } from "@aws-amplify/ui-react";
 import { useNavigate } from "react-router-dom";
 
-const QuizzesCard = () => {
+function QuizzesCard() {
   const navigate = useNavigate();
-  function handleQuizzes(courseName) {
+
+  function handleQuizClick(courseName) {
     let course = "";
     if (courseName.includes("Letters")) {
       course = "letters";
     } else if (courseName.includes("Words")) {
       course = "words";
     }
-    sessionStorage.setItem("Lesson", course);
+    sessionStorage.setItem("Quiz Topic", course);
     navigate("/quizzes");
   }
+
   return (
     <>
       <section className="quizzesCard">
@@ -37,7 +39,7 @@ const QuizzesCard = () => {
                   </div>
                 </div>
                 <div className="price"></div>
-                <Button onClick={() => handleQuizzes(val.coursesName)}>
+                <Button onClick={() => handleQuizClick(val.coursesName)}>
                   {" "}
                   Attempt Quiz{" "}
                 </Button>
@@ -48,7 +50,7 @@ const QuizzesCard = () => {
       </section>
     </>
   );
-};
+}
 
 const QuizzesHome = () => {
   return (
