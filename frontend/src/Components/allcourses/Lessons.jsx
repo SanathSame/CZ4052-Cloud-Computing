@@ -100,7 +100,7 @@ function Lessons({ CDN_URL }) {
                             <div className="video-popup-content">
                                 <video src={URL} controls onEnded={handleWatchComplete} />
                                 {isVideoWatched && (
-                                    <button onClick={() => handleAttemptQuiz(cardLetter)}>Attempt Quiz</button>
+                                    <button>Attempt Quiz</button>
                                 )}
                             </div>
                         </div>
@@ -135,10 +135,10 @@ function Lessons({ CDN_URL }) {
                         </div>
                     </div>
                     {showVideo && props.cardWord === letter && (
-                        <div className="video-popup">
+                        <div className="video-popup" onClick={handleCloseClick}>
                             <div className="video-popup-overlay" />
                             <div className="video-popup-content">
-                                <video src={URL} controls onEnded={handleWatchComplete} />
+                                <video src={props.cardWord === 'Butterfly' ? `${process.env.PUBLIC_URL}/butterfly.mp4` : URL} controls onEnded={handleWatchComplete} />
                                 {isVideoWatched && (
                                     <div>
                                         <Button onClick={() => handleAttemptQuiz(props.cardWord)}>Attempt Quiz</Button>
