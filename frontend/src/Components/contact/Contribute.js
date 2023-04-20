@@ -6,14 +6,18 @@ import Footer from '../common/footer/Footer'
 
 const Contribute = () => {
 
+    const handleClick = () => {
+        window.location.reload(false);
+    }
+
     return (
         <>
-        <Header/>
+            <Header />
             <Back title="Contribute" />
             <section className="contact padding">
-                <div className="container shadow" style={{display: 'flex', justifyContent: 'center'}}>
+                <div className="container shadow" style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className="right row">
-                        <h1 style={{display: 'flex', justifyContent: 'center', padding: '20px'}}>Contribute to our platform</h1>
+                        <h1 style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>Contribute to our platform</h1>
                         <form action="">
                             <div className="flexSB">
                                 <input type="text" placeholder='Name' />
@@ -23,12 +27,12 @@ const Contribute = () => {
                             <textarea cols="30" rows="10">
                                 Create a message here...
                             </textarea>
-                            <button className="primary-btn">SEND MESSAGE</button>
+                            <button className="primary-btn" onClick={handleClick}>SEND MESSAGE</button>
                         </form>
                     </div>
                 </div>
             </section>
-            <Footer/>
+            <Footer />
         </>
     )
 }
